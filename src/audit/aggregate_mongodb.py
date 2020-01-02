@@ -1,10 +1,8 @@
-from pymongo import MongoClient
-from bson.son import SON
-from src import static_strings
+from src import util
 
 
-def count_unique_values(collection, field):
-    restaurtants_db = MongoClient(static_strings.mongodb_server)[static_strings.restaurants_db]
+def group_and_count(collection, field):
+    restaurtants_db = util.get_restaurant_database()
     return restaurtants_db[collection].aggregate(
         [
             # The first stage in this pipe is to group data
@@ -17,3 +15,7 @@ def count_unique_values(collection, field):
             {"$sort": {"_id": 1}}
         ]
     )
+
+def check_util():
+    print(str(util.current_stage))
+    util.current_stage +=1
