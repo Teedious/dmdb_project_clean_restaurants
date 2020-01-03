@@ -5,6 +5,7 @@ mongodb_server = 'mongodb://localhost:27017/'
 restaurants_db = "restaurants_db"
 
 imported_collection = "imported"
+temp_collection = "temp_collection"
 current_stage = 0
 standard_collection = "cleaning_stage"
 
@@ -18,12 +19,26 @@ type_field = "type"
 field_names = [id_field, name_field, address_field, city_field, phone_field, type_field]
 
 
+def get_temp_collection():
+    MongoClient(mongodb_server)[restaurants_db].drop_collection(temp_collection)
+    return MongoClient(mongodb_server)[restaurants_db][temp_collection]
+
+
 def current_collection() -> pymongo.collection.Collection:
     return MongoClient(mongodb_server)[restaurants_db][current_collection_name()]
 
 
 def current_collection_name():
     return standard_collection + str(current_stage)
+
+
+def copy_current_to_next_stage():
+    cur_collection = current_collection()
+    cur_collection.aggregate([
+        {'$match':{}},
+        {'$out':go_to_next_stage().name}
+        ])
+    return current_collection()
 
 
 def go_to_next_stage():
@@ -44,11 +59,12 @@ def is_similar(a, b):
     return get_similarity_index(a, b) > 0
 
 
-def districts_as_dictionary():
+def invert_dictionary_lists(dictionary):
     ret = {}
-    for city in districts.keys():
-        for district in districts[city]:
-            ret[district] = city
+    for value in dictionary.keys():
+        for key in dictionary[value]:
+            if key != value:
+                ret[key] = value
     return ret
 
 
@@ -260,3 +276,212 @@ districts = {"los angeles":
                   "queens",
                   "staten island"]
              }
+
+street_suffix_abbreviations = {
+    "alley": ["allee", "aly", "ally", "aly"],
+    # "anex": ["anex", "anx", "annex", "annx", "anx"],
+    # "arcade": ["arc", "arc", "arcade"],
+    "avenue": ["av", "ave", "ave", "aven", "avenu", "avn"],
+    # "bayou": ["bayoo", "byu", "bayou"],
+    # "beach": ["bch", "bch", "beach"],
+    # "bend": ["bend", "bnd", "bnd"],
+    # "bluff": ["blf", "blf", "bluf", "bluff"],
+    # "bluffs": ["bluffs", "blfs"],
+    # "bottom": ["bot", "btm", "btm", "bottm", "bottom"],
+    "boulevard": ["blvd", "blvd", "boul", "boulv", "blv"],
+    # "branch": ["br", "br", "brnch", "branch"],
+    # "bridge": ["brdge", "brg", "brg", "bridge"],
+    # ### Added manually #############################
+    "broadway":[],
+    # "brook": ["brk", "brk", "brook"],
+    # "brooks": ["brooks", "brks"],
+    # "burg": ["burg", "bg"],
+    # "burgs": ["burgs", "bgs"],
+    # "bypass": ["byp", "byp", "bypa", "bypas", "bypass", "byps"],
+    # "camp": ["camp", "cp", "cp", "cmp"],
+    # "cape": ["cape", "cpe", "cpe"],
+    # "causeway": ["causeway", "cswy", "causwa", "cswy"],
+    # "circle": ["cir", "cir", "circ", "circl", "circle", "crcl", "crcle"],
+    # "circles": ["circles", "cirs"],
+    # "cliff": ["clf", "clf", "cliff"],
+    # "cliffs": ["clfs", "clfs", "cliffs"],
+    # "club": ["clb", "clb", "club"],
+    # "common": ["common", "cmn"],
+    # "commons": ["commons", "cmns"],
+    # "corner": ["cor", "cor", "corner"],
+    # "corners": ["corners", "cors", "cors"],
+    # "course": ["course", "crse", "crse"],
+    # "court": ["court", "ct", "ct"],
+    # "courts": ["courts", "cts", "cts"],
+    # "cove": ["cove", "cv", "cv"],
+    # "coves": ["coves", "cvs"],
+    # "creek": ["creek", "crk", "crk"],
+    # "crescent": ["crescent", "cres", "cres", "crsent", "crsnt"],
+    # "crest": ["crest", "crst"],
+    # "crossing": ["crossing", "xing", "crssng", "xing"],
+    # "crossroad": ["crossroad", "xrd"],
+    # "crossroads": ["crossroads", "xrds"],
+    # "curve": ["curve", "curv"],
+    # "dale": ["dale", "dl", "dl"],
+    # "dam": ["dam", "dm", "dm"],
+    # "divide": ["div", "dv", "divide", "dv", "dvd"],
+    "drive": ["dr", "dr", "driv", "drive", "drv"],
+    # "drives": ["drives", "drs"],
+    # "estate": ["est", "est", "estate"],
+    # "estates": ["estates", "ests", "ests"],
+    # "expressway": ["exp", "expy", "expr", "express", "expressway", "expw", "expy"],
+    # "extension": ["ext", "ext", "extension", "extn", "extnsn"],
+    # "extensions": ["exts", "exts"],
+    # "fall": ["fall", "fall"],
+    # "falls": ["falls", "fls", "fls"],
+    # "ferry": ["ferry", "fry", "frry", "fry"],
+    # "field": ["field", "fld", "fld"],
+    # "fields": ["fields", "flds", "flds"],
+    # "flat": ["flat", "flt", "flt"],
+    # "flats": ["flats", "flts", "flts"],
+    # ### Added manually #############################
+    "floor" : ["fl"],
+    # "ford": ["ford", "frd", "frd"],
+    # "fords": ["fords", "frds"],
+    # "forest": ["forest", "frst", "forests", "frst"],
+    # "forge": ["forg", "frg", "forge", "frg"],
+    # "forges": ["forges", "frgs"],
+    # "fork": ["fork", "frk", "frk"],
+    # "forks": ["forks", "frks", "frks"],
+    # "fort": ["fort", "ft", "frt", "ft"],
+    # "freeway": ["freeway", "fwy", "freewy", "frway", "frwy", "fwy"],
+    # "garden": ["garden", "gdn", "gardn", "grden", "grdn"],
+    # "gardens": ["gardens", "gdns", "gdns", "grdns"],
+    # "gateway": ["gateway", "gtwy", "gatewy", "gatway", "gtway", "gtwy"],
+    # "glen": ["glen", "gln", "gln"],
+    # "glens": ["glens", "glns"],
+    # "green": ["green", "grn", "grn"],
+    # "greens": ["greens", "grns"],
+    # "grove": ["grov", "grv", "grove", "grv"],
+    # "groves": ["groves", "grvs"],
+    # "harbor": ["harb", "hbr", "harbor", "harbr", "hbr", "hrbor"],
+    # "harbors": ["harbors", "hbrs"],
+    # "haven": ["haven", "hvn", "hvn"],
+    # "heights": ["ht", "hts", "hts"],
+    "highway": ["highway", "hwy", "highwy", "hiway", "hiwy", "hway", "hwy"],
+    # "hill": ["hill", "hl", "hl"],
+    # "hills": ["hills", "hls", "hls"],
+    # "hollow": ["hllw", "holw", "hollow", "hollows", "holw", "holws"],
+    # "inlet": ["inlt", "inlt"],
+    # "island": ["is", "is", "island", "islnd"],
+    # "islands": ["islands", "iss", "islnds", "iss"],
+    # "isle": ["isle", "isle", "isles"],
+    # "junction": ["jct", "jct", "jction", "jctn", "junction", "junctn", "juncton"],
+    # "junctions": ["jctns", "jcts", "jcts", "junctions"],
+    # "key": ["key", "ky", "ky"],
+    # "keys": ["keys", "kys", "kys"],
+    # "knoll": ["knl", "knl", "knol", "knoll"],
+    # "knolls": ["knls", "knls", "knolls"],
+    # "lake": ["lk", "lk", "lake"],
+    # "lakes": ["lks", "lks", "lakes"],
+    # "land": ["land", "land"],
+    # "landing": ["landing", "lndg", "lndg", "lndng"],
+    "lane": ["lane", "ln", "ln"],
+    # "light": ["lgt", "lgt", "light"],
+    # "lights": ["lights", "lgts"],
+    # "loaf": ["lf", "lf", "loaf"],
+    # "lock": ["lck", "lck", "lock"],
+    # "locks": ["lcks", "lcks", "locks"],
+    # "lodge": ["ldg", "ldg", "ldge", "lodg", "lodge"],
+    # "loop": ["loop", "loop", "loops"],
+    # "manor": ["mnr", "mnr", "manor"],
+    # "manors": ["manors", "mnrs", "mnrs"],
+    # "meadow": ["meadow", "mdw"],
+    # "meadows": ["mdw", "mdws", "mdws", "meadows", "medows"],
+    # "mews": ["mews", "mews"],
+    # "mill": ["mill", "ml"],
+    # "mills": ["mills", "mls"],
+    # "mission": ["missn", "msn", "mssn"],
+    # "motorway": ["motorway", "mtwy"],
+    # "mount": ["mnt", "mt", "mt", "mount"],
+    # "mountain": ["mntain", "mtn", "mntn", "mountain", "mountin", "mtin", "mtn"],
+    # "mountains": ["mntns", "mtns", "mountains"],
+    # "neck": ["nck", "nck", "neck"],
+    # "orchard": ["orch", "orch", "orchard", "orchrd"],
+    # "oval": ["oval", "oval", "ovl"],
+    # "overpass": ["overpass", "opas"],
+    "park": ["park", "park", "prk"],
+    # "parks": ["parks", "prks"],
+    "parkway": [ "pkwy", "parkwy", "pkway", "pkwy", "pky"],
+    # "parkways": ["parkways", "pkwy", "pkwys"],
+    # "pass": ["pass", "pass"],
+    # "passage": ["passage", "psge"],
+    # "path": ["path", "path", "paths"],
+    # ### Entered manually ##############################
+    "pacific coast highway" : ["pch"],
+    # "pike": ["pike", "pike", "pikes"],
+    # "pine": ["pine", "pne"],
+    # "pines": ["pines", "pnes", "pnes"],
+    "place": ["pl", "pl"],
+    # "plain": ["plain", "pln", "pln"],
+    # "plains": ["plains", "plns", "plns"],
+    "plaza": ["plaza", "plz", "plz", "plza"],
+    # "point": ["point", "pt", "pt"],
+    # "points": ["points", "pts", "pts"],
+    # "port": ["port", "prt", "prt"],
+    # "ports": ["ports", "prts", "prts"],
+    # "prairie": ["pr", "pr", "prairie", "prr"],
+    # "radial": ["rad", "radl", "radial", "radiel", "radl"],
+    # "ramp": ["ramp", "ramp"],
+    # "ranch": ["ranch", "rnch", "ranches", "rnch", "rnchs"],
+    # "rapid": ["rapid", "rpd", "rpd"],
+    # "rapids": ["rapids", "rpds", "rpds"],
+    # "rest": ["rest", "rst", "rst"],
+    # "ridge": ["rdg", "rdg", "rdge", "ridge"],
+    # "ridges": ["rdgs", "rdgs", "ridges"],
+    # "river": ["riv", "riv", "river", "rvr", "rivr"],
+    "road": ["rd", "rd"],
+    "roads": ["rds", "rds"],
+    # "route": ["route", "rte"],
+    # "row": ["row", "row"],
+    # "rue": ["rue", "rue"],
+    # "run": ["run", "run"],
+    # "shoal": ["shl", "shl", "shoal"],
+    # "shoals": ["shls", "shls", "shoals"],
+    # "shore": ["shoar", "shr", "shore", "shr"],
+    # "shores": ["shoars", "shrs", "shores", "shrs"],
+    # "skyway": ["skyway", "skwy"],
+    # "spur": ["spur", "spur"],
+    # "spurs": ["spurs", "spur"],
+    "square": ["sq", "sq", "sqr", "sqre", "squ"],
+    # "squares": ["sqrs", "sqs", "squares"],
+    # "station": ["sta", "sta", "station", "statn", "stn"],
+    # "stravenue": ["stra", "stra", "strav", "straven", "stravenue", "stravn", "strvn", "strvnue"],
+    # "stream": ["stream", "strm", "streme", "strm"],
+    "street": ["st", "strt", "st", "str"],
+    "streets": ["sts"],
+    # "summit": ["smt", "smt", "sumit", "sumitt", "summit"],
+    # "terrace": ["ter", "ter", "terr", "terrace"],
+    # "throughway": ["throughway", "trwy"],
+    # "trace": ["trace", "trce", "traces", "trce"],
+    # "track": ["track", "trak", "tracks", "trak", "trk", "trks"],
+    # "trafficway": ["trafficway", "trfy"],
+    # "trail": ["trail", "trl", "trails", "trl", "trls"],
+    # "trailer": ["trailer", "trlr", "trlr", "trlrs"],
+    # "tunnel": ["tunel", "tunl", "tunl", "tunls", "tunnel", "tunnels", "tunnl"],
+    # "turnpike": ["trnpk", "tpke", "turnpike", "turnpk"],
+    # "underpass": ["underpass", "upas"],
+    # "union": ["un", "un", "union"],
+    # "unions": ["unions", "uns"],
+    "valley": ["valley", "vly", "vally", "vlly", "vly"],
+    # "valleys": ["valleys", "vlys", "vlys"],
+    # "viaduct": ["vdct", "via", "via", "viadct", "viaduct"],
+    # "view": ["view", "vw", "vw"],
+    # "views": ["views", "vws", "vws"],
+    # "village": ["vill", "vlg", "villag", "village", "villg", "villiage", "vlg"],
+    # "villages": ["villages", "vlgs", "vlgs"],
+    # "ville": ["ville", "vl", "vl"],
+    # "vista": ["vis", "vis", "vist", "vista", "vst", "vsta"],
+    "walk": ["walk", "walk"],
+    # "walks": ["walks", "walk"],
+    # "wall": ["wall", "wall"],
+    "way": ["wy", "way", "way"],
+    "ways": ["ways", "ways"],
+    # "well": ["well", "wl"],
+    # "wells": ["wells", "wls", "wls", ],
+}
