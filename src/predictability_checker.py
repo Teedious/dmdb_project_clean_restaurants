@@ -1,5 +1,6 @@
 import csv
 from src import util
+from src.detect_duplicates import qgram_distance
 
 data_map = {}
 
@@ -9,20 +10,20 @@ def init(fieldnames, data_list):
         data_map[name] = {}
     for row in data_list:
         for row_key in row.keys():
-            data_map[row_key][row[row_key]] = {}
+            data_map[row_key][str(row[row_key])] = {}
             for data_name in fieldnames:
-                data_map[row_key][row[row_key]][data_name] = set()
+                data_map[row_key][str(row[row_key])][data_name] = set()
 
 
-def check_indications(data):
-    fieldnames = data.fieldnames
+
+def check_indications(fieldnames, data):
     data_list = list(data)
     init(fieldnames, data_list)
 
     for row in data_list:
         for row_key in row.keys():
             for data_name in row.keys():
-                data_map[row_key][row[row_key]][data_name].add(row[data_name])
+                data_map[str(row_key)][str(row[row_key])][str(data_name)].add(str(row[data_name]))
     print("done creating dictionary")
 
     prediction_map = {}
@@ -52,22 +53,3 @@ def check_indications(data):
         avg_map[top_key] = sum / count
 
     return avg_map
-
-
-from bson.code import Code
-
-
-def check_indications1(collection):
-    db = util.get_restaurant_database()
-    for source_field in util.field_names:
-        for target_field in util.field_names:
-            map = Code("function () {" + \
-                       "emit(this.{}, [this.{}]);".format(source_field, target_field)) + \
-                  "}"
-            reduce = Code("function(key, values){"
-                          "return [values.length];"
-                          "}")
-            result = db[collection].map_reduce(map, reduce, {"replace": "mydict"})
-            for doc in db["mydict"].find():
-                print(doc)
-            print("----")

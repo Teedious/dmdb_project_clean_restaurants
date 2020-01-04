@@ -4,16 +4,15 @@ from collections import defaultdict
 from src import util
 
 
-def audit_street_type(street_types, street_name, original):
-    street_type_re = re.compile(r'\b\S+\.?(?: \w\.?)?$',re.IGNORECASE)
+def audit_street_type(street_types, street_name: str, original):
     expected = util.street_suffix_abbreviations.keys()
 
-    result = street_type_re.search(street_name)
-    if result:
-        street_type = result.group()
-        if street_type not in expected:
-            a = street_type.split(" ")[0]
-            if a not in expected:
+    street_words = street_name.split(" ")
+    if len(street_words) > 0:
+        street_type = street_words[-1]
+        if street_type not in expected and len(street_words)>1:
+            street_type = street_words[-2]
+            if street_type not in expected:
                 street_types[street_type].add((street_name, original))
 
 
@@ -29,7 +28,7 @@ def standardize_addresses():
 
     double_space = re.compile("  ")
 
-    data = current_collection.find({})
+    data = [a for a in current_collection.find({})]
     next_collection = util.go_to_next_stage()
 
     for entry in data:
@@ -45,30 +44,35 @@ def standardize_addresses():
         if result:
             address = address[:result.start()]
 
-        while True:
-            result = None
-            result = abbr_replacement.search(address)
-            if result:
-                address_1 = address[:result.start()]
-                address_2 = abbr_lookup[result.group('abbr')]
-                address_3 = address[result.end():]
+        results = abbr_replacement.finditer(address)
+        for result in results:
+            address_1 = address[:result.start()]
+            address_2 = abbr_lookup[result.group('abbr')]
+            address_3 = address[result.end():]
 
-                address_1 += " "
-                address_3 = " "+address_3 if address_3 != "" else ""
+            address_1 += " "
+            address_3 = " " + address_3 if address_3 != "" else ""
 
-                address = address_1 + address_2 + address_3
-            else:
-                break
+            address = address_1 + address_2 + address_3
 
         result = double_space.search(address)
         if result:
             address = address[:result.start()]
+
+        address = address.strip()
 
         audit_street_type(street_types, address, original)
 
         entry[util.address_field] = address
         next_collection.save(entry)
 
+    not_expected_count = sum(map(lambda x: len(street_types[x]),street_types))
+    total_count = len(data)
+    ratio_not_expected = not_expected_count/total_count*100
+    ratio_expected = 100- ratio_not_expected
+    print("Not expected:       {}/{}".format(not_expected_count,total_count))
+    print("Ratio not expected: {:5.1f}%".format(ratio_not_expected))
+    print("Ratio expected:     {:5.1f}%".format(ratio_expected))
     return street_types
 
 
@@ -126,6 +130,27 @@ def standardize_cities():
 
 
 def standardize_restaurant_types():
-    current_collection = util.current_collection()
+    working_collection = util.copy_current_to_next_stage()
 
-    data = current_collection.find()
+    containing_numbers = re.compile(r" \d.*\d ")
+    split_points = re.compile(r"(?: and |/)")
+
+    replace_dict = {"bbq": "barbecue"}
+    data = working_collection.find({})
+
+    for entry in data:
+        type_content = entry[util.type_field]
+
+        result = containing_numbers.search(type_content)
+        if result:
+            type_content = type_content[containing_numbers.search(type_content).end():]
+
+        type_content = split_points.split(type_content)
+
+        for i,content in enumerate(type_content):
+            type_content[i] = replace_dict.get(content,content)
+
+        entry[util.type_field] = type_content
+        working_collection.save(entry)
+
+

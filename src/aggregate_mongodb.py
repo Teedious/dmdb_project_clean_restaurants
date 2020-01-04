@@ -1,6 +1,7 @@
 from src import util
 import re
 
+
 def group_and_count(collection, field):
     restaurtants_db = util.get_restaurant_database()
     return restaurtants_db[collection].aggregate(
@@ -13,6 +14,30 @@ def group_and_count(collection, field):
                   }
              },
             {"$sort": {"_id": 1}}
+        ]
+    )
+
+
+def unwind_group_and_count(collection, field):
+    restaurtants_db = util.get_restaurant_database()
+    return restaurtants_db[collection].aggregate(
+        [
+            {"$unwind":"${}".format(field)},
+            {'$group':
+                 {'_id': "${}".format(field),
+                  "count":
+                      {'$sum': 1}
+                  }
+             },
+            {"$sort": {"_id": 1}}
+        ]
+    )
+
+def sort(collection, field):
+    restaurtants_db = util.get_restaurant_database()
+    return restaurtants_db[collection].aggregate(
+        [
+            {"$sort": {field: 1}}
         ]
     )
 
@@ -35,3 +60,4 @@ def aggregate_street_types():
 
     for entry in aggregates:
         print(entry)
+
