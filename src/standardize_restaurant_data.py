@@ -152,5 +152,3 @@ def standardize_restaurant_types():
 
         entry[util.type_field] = type_content
         working_collection.save(entry)
-
-

@@ -1,7 +1,3 @@
-import csv
-from src import util
-from src.detect_duplicates import qgram_distance
-
 data_map = {}
 
 
@@ -13,7 +9,6 @@ def init(fieldnames, data_list):
             data_map[row_key][str(row[row_key])] = {}
             for data_name in fieldnames:
                 data_map[row_key][str(row[row_key])][data_name] = set()
-
 
 
 def check_indications(fieldnames, data):

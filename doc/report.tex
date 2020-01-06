@@ -6,15 +6,17 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{csquotes}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{xurl}
+\usepackage[style=ieee]{biblatex}
 \usepackage{hyperref}
+\bibliography{bibfile}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -40,13 +42,14 @@ MongoDB, Data cleaning
 \end{IEEEkeywords}
 
 \section{Introduction}
-Data cleaning, also referred to as data scrubbing or data cleansing, is a research field concerned with improving the quality of faulty data. Typical aspects that are sought to be improved are the amount of duplicates, type errors or inconsistencies in the data
+Data cleaning, also referred to as data scrubbing or data cleansing, is a research field concerned with improving the quality of faulty data. Typical aspects that are sought to be improved are the amount of duplicates, type errors or inconsistencies in the data\cite{Bilenko.2003}
 
 %% Outline
 
 \section{Data Cleaning Fundamentals}
 
-\
+\printbibliography
+
 \begin{thebibliography}{00}
 \bibitem{Sarawagi} IEEE Data Eng. Bull., S. Sarawagi, ed., special issue on data
 cleaning, vol. 23, no. 4, Dec. 2000.
