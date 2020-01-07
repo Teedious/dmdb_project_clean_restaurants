@@ -18,6 +18,10 @@ def audit_street_type(street_types, street_name: str, original):
 
 def standardize_addresses():
     current_collection = util.current_collection()
+    data = [a for a in current_collection.find({})]
+    next_collection = util.go_to_next_stage()
+    new_data = list()
+
     street_types = defaultdict(set)
 
     directions = re.compile(r"( (at|near|between|off|in) )")
@@ -27,9 +31,6 @@ def standardize_addresses():
     abbr_lookup = util.invert_dictionary_lists(util.street_suffix_abbreviations)
 
     double_space = re.compile("  ")
-
-    data = [a for a in current_collection.find({})]
-    next_collection = util.go_to_next_stage()
 
     for entry in data:
         address = entry.get(util.address_field)
@@ -64,7 +65,8 @@ def standardize_addresses():
         audit_street_type(street_types, address, original)
 
         entry[util.address_field] = address
-        next_collection.save(entry)
+        new_data.append(entry)
+    next_collection.insert_many(new_data)
 
     not_expected_count = sum(map(lambda x: len(street_types[x]),street_types))
     total_count = len(data)
@@ -79,11 +81,10 @@ def standardize_addresses():
 def standardize_phone_numbers():
     current_collection = util.current_collection()
     data = current_collection.find()
-
+    next_collection = util.go_to_next_stage()
+    new_data = list()
     non_number = re.compile(r"\D+")
     non_number_start_end = re.compile(r"(^\D+)|(\D+$)")
-
-    next_collection = util.go_to_next_stage()
 
     for entry in data:
         phone: str = entry.get(util.phone_field)
@@ -97,11 +98,15 @@ def standardize_phone_numbers():
         phone = re.sub(non_number, "-", phone)
         entry[util.phone_field] = phone
 
-        next_collection.save(entry)
+        new_data.append(entry)
+    next_collection.insert_many(new_data)
 
 
 def standardize_cities():
     current_collection = util.current_collection()
+    data = current_collection.find({})
+    next_collection = util.go_to_next_stage()
+    new_data = list()
 
     replace_dict = {
         'la': 'los angeles',
@@ -112,8 +117,7 @@ def standardize_cities():
     }
     district_dict = util.invert_dictionary_lists(util.districts)
 
-    data = current_collection.find({})
-    next_collection = util.go_to_next_stage()
+
 
     for entry in data:
         std_city = entry.get(util.city_field)
@@ -126,17 +130,20 @@ def standardize_cities():
         std_city = district_dict.get(std_city, std_city)
 
         entry[util.city_field] = std_city
-        next_collection.save(entry)
+        new_data.append(entry)
+    next_collection.insert_many(new_data)
 
 
 def standardize_restaurant_types():
-    working_collection = util.copy_current_to_next_stage()
+    current_collection = util.current_collection()
+    data = current_collection.find({})
+    next_collection = util.go_to_next_stage()
+    new_data = list()
 
     containing_numbers = re.compile(r" \d.*\d ")
     split_points = re.compile(r"(?: and |/)")
 
     replace_dict = {"bbq": "barbecue"}
-    data = working_collection.find({})
 
     for entry in data:
         type_content = entry[util.type_field]
@@ -151,4 +158,5 @@ def standardize_restaurant_types():
             type_content[i] = replace_dict.get(content,content)
 
         entry[util.type_field] = type_content
-        working_collection.save(entry)
+        new_data.append(entry)
+    next_collection.insert_many(new_data)

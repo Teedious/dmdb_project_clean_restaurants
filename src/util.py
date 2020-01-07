@@ -1,7 +1,9 @@
 import pymongo
 from pymongo import MongoClient
+from src import tsvimport
 
-mongodb_server = 'mongodb://localhost:27017/'
+# mongodb_server = 'mongodb://localhost:27017/'
+mongodb_server = "mongodb+srv://wmdb_temp:8EDM3sv5WiMBr26K@wmdb-01-7b21x.mongodb.net/test?retryWrites=true&w=majority"
 restaurants_db = "restaurants_db"
 
 imported_collection = "imported"
@@ -37,7 +39,7 @@ def copy_current_to_next_stage():
     cur_collection.aggregate([
         {'$match':{}},
         {'$out':go_to_next_stage().name}
-        ])
+    ])
     return current_collection()
 
 
@@ -65,6 +67,15 @@ def invert_dictionary_lists(dictionary):
         for key in dictionary[value]:
             if key != value:
                 ret[key] = value
+    return ret
+
+
+def get_gold_standard():
+    gold_data = tsvimport.getDicts("./data/restaurants_DPL.tsv")
+    keys = gold_data["meta"].fieldnames
+    ret = set()
+    for entry in gold_data["data"]:
+        ret.add((int(entry[keys[0]]),int(entry[keys[1]])))
     return ret
 
 

@@ -9,6 +9,8 @@ verify_ssl = true
 requests = "*"
 pymongo = "*"
 py_stringmatching = "*"
+dnspython = "*"
+six = "*"
 
 [requires]
 python_version = "3.7"
