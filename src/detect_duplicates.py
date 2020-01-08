@@ -61,9 +61,12 @@ def audit_duplicates():
                 for field_to_check in checked_fields:
                     if field_to_check not in similarity_values[i_id][j_id]:
                         if field_to_check == util.phone_field:
-                            similarity_values[i_id][j_id][field_to_check] = sm.HammingDistance().get_sim_score(
-                                "".join(tokenized_data[i][field_to_check]),
-                                "".join(tokenized_data[j][field_to_check]))
+                            a = "".join(tokenized_data[i][field_to_check])
+                            b = "".join(tokenized_data[j][field_to_check])
+                            if a == b or a in b or b in a:
+                                similarity_values[i_id][j_id][field_to_check] = 1
+                            else:
+                                similarity_values[i_id][j_id][field_to_check] = 0
                         else:
                             similarity_values[i_id][j_id][field_to_check] = sim_measures[field_to_check].get_raw_score(
                                 tokenized_data[i][field_to_check],
@@ -82,6 +85,7 @@ def get_duplicates(a,b,c):
             if possible_duplicates[key1][key2][util.phone_field] >= a \
                     and possible_duplicates[key1][key2][util.name_field] >= b \
                     and possible_duplicates[key1][key2][util.address_field] >= c:
+
                 duplicates.add(tuple(sorted([int(key1), int(key2)])))
     return duplicates
 
