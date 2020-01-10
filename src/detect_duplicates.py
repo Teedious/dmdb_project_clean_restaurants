@@ -7,17 +7,21 @@ import py_stringmatching as sm
 from timeit import default_timer as timer
 
 
+possible_duplicates = {}
+
+
 def audit_duplicates(collection_lane):
     tokenized_data = get_tokenized_data(list(util.current_collection(collection_lane).find({})))
-    sim_measures = {}
-    for field in util.field_names:
-        sim_measures[field] = sm.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
-
     num_entries = len(tokenized_data)
-    comparisons = 4
+    entry_comparisons = 4
     similarity_values = {}
-    checked_fields = [util.phone_field, util.address_field, util.name_field]
-    for field in checked_fields:
+    similarity_measures = {}
+    measured_fields = [util.phone_field, util.address_field, util.name_field]
+
+    for field in util.field_names:
+        similarity_measures[field] = sm.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
+
+    for field in measured_fields:
 
         if field == util.phone_field:
             tokenized_data.sort(key=lambda x: "".join(x[field]))
@@ -26,25 +30,20 @@ def audit_duplicates(collection_lane):
 
         for i in range(0, num_entries):
             i_id = tokenized_data[i][util.id_field][0]
-
             if i_id not in similarity_values:
                 similarity_values[i_id] = {}
 
-            for j in range(i+1, min(i+1 + comparisons, num_entries)):
+            for j in range(i+1, min(i+1 + entry_comparisons, num_entries)):
                 j_id = tokenized_data[j][util.id_field][0]
-
                 if j_id not in similarity_values[i_id]:
                     similarity_values[i_id][j_id] = {}
 
-                for field_to_check in checked_fields:
+                for field_to_check in measured_fields:
                     if field_to_check not in similarity_values[i_id][j_id]:
-                        similarity_values[i_id][j_id][field_to_check] = sim_measures[field_to_check].get_raw_score(
+                        similarity_values[i_id][j_id][field_to_check] = similarity_measures[field_to_check].get_raw_score(
                             tokenized_data[i][field_to_check],
                             tokenized_data[j][field_to_check])
     return similarity_values
-
-
-possible_duplicates = {}
 
 
 def get_duplicates(collection_lane,a, b, c):
