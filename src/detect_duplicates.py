@@ -7,28 +7,6 @@ import py_stringmatching as sm
 from timeit import default_timer as timer
 
 
-def test1():
-    field_1 = util.phone_field
-    field_2 = util.name_field
-    data = [a for a in util.current_collection().find()]
-
-    l = []
-    for i in range(0, len(data) - 1):
-        i_total = timer()
-        for j in range(i + 1, len(data) - 1):
-            if data[i][field_1] == data[j][field_1]:
-                d = {}
-                for cu_fi in util.field_names:
-                    d[cu_fi] = s.get_sim_score(str(data[i][cu_fi]), str(data[j][cu_fi]))
-                l.append((data[i], data[j], d))
-        if i % 50 == 0:
-            print(i)
-        print(timer() - i_total)
-
-    l.sort(key=lambda x: int(x[0][util.id_field]))
-    print_results(l)
-
-
 def audit_duplicates(collection_lane):
     tokenized_data = get_tokenized_data(list(util.current_collection(collection_lane).find({})))
     sim_measures = {}
@@ -36,21 +14,23 @@ def audit_duplicates(collection_lane):
         sim_measures[field] = sm.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
 
     num_entries = len(tokenized_data)
-    num_matches = 4
+    comparisons = 4
     similarity_values = {}
     checked_fields = [util.phone_field, util.address_field, util.name_field]
     for field in checked_fields:
+
         if field == util.phone_field:
             tokenized_data.sort(key=lambda x: "".join(x[field]))
         else:
             tokenized_data.sort(key=lambda x: "".join(sorted(x[field])))
+
         for i in range(0, num_entries):
             i_id = tokenized_data[i][util.id_field][0]
 
             if i_id not in similarity_values:
                 similarity_values[i_id] = {}
 
-            for j in range(i + 1, min(i + 1 + num_matches, num_entries)):
+            for j in range(i+1, min(i+1 + comparisons, num_entries)):
                 j_id = tokenized_data[j][util.id_field][0]
 
                 if j_id not in similarity_values[i_id]:
