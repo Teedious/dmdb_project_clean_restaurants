@@ -38,14 +38,6 @@ def audit_duplicates(collection_lane):
 
                 for field_to_check in checked_fields:
                     if field_to_check not in similarity_values[i_id][j_id]:
-                        # if field_to_check == util.phone_field:
-                        #     a = "".join(tokenized_data[i][field_to_check])
-                        #     b = "".join(tokenized_data[j][field_to_check])
-                        #     if a == b or a in b or b in a:
-                        #         similarity_values[i_id][j_id][field_to_check] = 1
-                        #     else:
-                        #         similarity_values[i_id][j_id][field_to_check] = 0
-                        # else:
                         similarity_values[i_id][j_id][field_to_check] = sim_measures[field_to_check].get_raw_score(
                             tokenized_data[i][field_to_check],
                             tokenized_data[j][field_to_check])
