@@ -1,21 +1,27 @@
+import math
+
 import pymongo
 from pymongo import MongoClient
-from src import tsvimport
+import random
+from src import import_export
 import os
-import pickle
 
-mongodb_server = 'mongodb://localhost:27017/'
-# monkgodb_server = "mongodb+srv://wmdb_temp:8EDM3sv5WiMBr26K@wmdb-01-7b21x.mongodb.net/test?retryWrites=true&w=majority"
+# mongodb_server = 'mongodb://localhost:27017/'
+mongodb_server = "mongodb+srv://wmdb_temp:8EDM3sv5WiMBr26K@wmdb-01-7b21x.mongodb.net"
 restaurants_db = "restaurants_db"
-nominatim_search = "https://nominatim.openstreetmap.org/search?"
 imported_collection = "imported"
 temp_collection = "temp_collection"
-current_stage = 0
+current_stage = {}
+training_set_size = 100
 standard_collection = "cleaning_stage"
+collection_lane_a = "collection_lane_a"
+collection_lanes = [standard_collection, collection_lane_a]
 
 gold_standard_file = "./data/restaurants_DPL.tsv"
 training_set_file = "./data/restaurants_training.tsv"
-restaurants_file = ""
+training_set_gold_standard_file = "./data/restaurants_training_DPL.tsv"
+restaurants_file = "./data/restaurants.tsv"
+export_file = "./data/export/restaurants_export.tsv"
 
 id_pm = "_id"
 id_field = "id"
@@ -39,27 +45,27 @@ def get_temp_collection():
     return MongoClient(mongodb_server)[restaurants_db][temp_collection]
 
 
-def current_collection() -> pymongo.collection.Collection:
-    return MongoClient(mongodb_server)[restaurants_db][current_collection_name()]
+def current_collection(collection_lane=standard_collection) -> pymongo.collection.Collection:
+    return MongoClient(mongodb_server)[restaurants_db][current_collection_name(collection_lane)]
 
 
-def current_collection_name():
-    return standard_collection + str(current_stage)
+def current_collection_name(collection_lane=standard_collection):
+    return collection_lane + str(current_stage.get(collection_lane, 0))
 
 
-def copy_current_to_next_stage():
-    cur_collection = current_collection()
+def copy_current_to_next_stage(collection_lane=standard_collection):
+    cur_collection = current_collection(collection_lane)
     cur_collection.aggregate([
         {'$match': {}},
-        {'$out': go_to_next_stage().name}
+        {'$out': go_to_next_stage(collection_lane).name}
     ])
-    return current_collection()
+    return current_collection(collection_lane)
 
 
-def go_to_next_stage():
+def go_to_next_stage(collection_lane=standard_collection):
     global current_stage
-    current_stage += 1
-    return current_collection()
+    current_stage[collection_lane] = current_stage.get(collection_lane, 0) + 1
+    return current_collection(collection_lane)
 
 
 def get_restaurant_database():
@@ -85,11 +91,50 @@ def invert_dictionary_lists(dictionary):
 
 def choose_random_values_once():
     if os.path.isfile(training_set_file):
-        tsvimport.getDicts()
+        return
+
+    import_export.init_cleaning(restaurants_file, collection_lane_a)
+    num_entries = current_collection().estimated_document_count()
+    duplicate_possibilites = list(range(1,112+1))
+    possibilities = list(range(1, num_entries+1))
+    duplicate_ratio = len(duplicate_possibilites*2)/len(possibilities)
+    choices = []
+    choices_import = []
+
+    choose_duplicates = math.floor(training_set_size*duplicate_ratio/2)*2
+    duplicate_ratio *=2
+
+    for i in range(0, choose_duplicates//2):
+        choice = random.choice(duplicate_possibilites)
+
+        duplicate_possibilites.remove(choice)
+        possibilities.remove(choice*2-1)
+        possibilities.remove(choice*2)
+
+        choices.append(str(choice*2-1))
+        choices.append(str(choice*2))
+
+        choices_import.append({"id1":str(choice*2-1), "id2":str(choice*2)})
+
+    temp_coll = get_temp_collection()
+    temp_coll.insert_many(sorted(choices_import,key=lambda x: int(x["id1"])))
+    import_export.export_restaurants_data(training_set_gold_standard_file, temp_coll.name, ["id1","id2"])
+
+    for i in range(0,training_set_size-choose_duplicates):
+        choice = random.choice(possibilities)
+        possibilities.remove(choice)
+        choices.append(str(choice))
+
+    a = [a for a in current_collection().find({id_field: {"$in": choices}})]
+
+    go_to_next_stage(collection_lane_a).insert_many(a)
+
+    import_export.export_restaurants_data(training_set_file, current_collection_name(collection_lane_a), field_names)
 
 
-def get_gold_standard():
-    gold_data = tsvimport.getDicts(gold_standard_file)
+
+def get_gold_standard(file_path):
+    gold_data = import_export.import_tsv(file_path)
     keys = gold_data["meta"].fieldnames
     ret = set()
     for entry in gold_data["data"]:
@@ -307,6 +352,7 @@ districts = {"los angeles":
              }
 
 street_suffix_abbreviations = {
+    # subset of list at https://pe.usps.com/text/pub28/28apc_002.htm
     "alley": ["allee", "aly", "ally", "aly"],
     "avenue": ["av", "ave", "ave", "aven", "avenu", "avn"],
     "boulevard": ["blvd", "blvd", "boul", "boulv", "blv"],

@@ -29,12 +29,10 @@ def test1():
     print_results(l)
 
 
-def audit_duplicates():
-    tokenized_data = get_tokenized_data(list(util.current_collection().find({})))
+def audit_duplicates(collection_lane):
+    tokenized_data = get_tokenized_data(list(util.current_collection(collection_lane).find({})))
     sim_measures = {}
     for field in util.field_names:
-        if field == util.phone_field:
-            sim_measures[field] = sm.HammingDistance()
         sim_measures[field] = sm.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
 
     num_entries = len(tokenized_data)
@@ -60,32 +58,33 @@ def audit_duplicates():
 
                 for field_to_check in checked_fields:
                     if field_to_check not in similarity_values[i_id][j_id]:
-                        if field_to_check == util.phone_field:
-                            a = "".join(tokenized_data[i][field_to_check])
-                            b = "".join(tokenized_data[j][field_to_check])
-                            if a == b or a in b or b in a:
-                                similarity_values[i_id][j_id][field_to_check] = 1
-                            else:
-                                similarity_values[i_id][j_id][field_to_check] = 0
-                        else:
-                            similarity_values[i_id][j_id][field_to_check] = sim_measures[field_to_check].get_raw_score(
-                                tokenized_data[i][field_to_check],
-                                tokenized_data[j][field_to_check])
+                        # if field_to_check == util.phone_field:
+                        #     a = "".join(tokenized_data[i][field_to_check])
+                        #     b = "".join(tokenized_data[j][field_to_check])
+                        #     if a == b or a in b or b in a:
+                        #         similarity_values[i_id][j_id][field_to_check] = 1
+                        #     else:
+                        #         similarity_values[i_id][j_id][field_to_check] = 0
+                        # else:
+                        similarity_values[i_id][j_id][field_to_check] = sim_measures[field_to_check].get_raw_score(
+                            tokenized_data[i][field_to_check],
+                            tokenized_data[j][field_to_check])
     return similarity_values
 
-possible_duplicates = None
 
-def get_duplicates(a,b,c):
-    global  possible_duplicates
-    if possible_duplicates is None:
-        possible_duplicates = audit_duplicates()
+possible_duplicates = {}
+
+
+def get_duplicates(collection_lane,a, b, c):
+    global possible_duplicates
+    if collection_lane not in possible_duplicates:
+        possible_duplicates[collection_lane] = audit_duplicates(collection_lane)
     duplicates = set()
     for key1 in possible_duplicates:
         for key2 in possible_duplicates[key1]:
             if possible_duplicates[key1][key2][util.phone_field] >= a \
                     and possible_duplicates[key1][key2][util.name_field] >= b \
                     and possible_duplicates[key1][key2][util.address_field] >= c:
-
                 duplicates.add(tuple(sorted([int(key1), int(key2)])))
     return duplicates
 

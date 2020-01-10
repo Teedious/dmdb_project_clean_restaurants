@@ -1,3 +1,5 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Data Cleaning Fundamentals}{}% 2
-\BOOKMARK [1][-]{section*.2}{References}{}% 3
+\BOOKMARK [1][-]{section.2}{Basics}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Data Cleaning Fundamentals}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Stringmatching}{section.2}% 4
+\BOOKMARK [1][-]{section*.2}{References}{}% 5

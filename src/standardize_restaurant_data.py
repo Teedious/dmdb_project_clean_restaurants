@@ -18,10 +18,10 @@ def audit_street_type(street_types, street_name: str, original):
                 street_types[street_type].add((street_name, original))
 
 
-def standardize_addresses():
-    current_collection = util.current_collection()
+def standardize_addresses(collection_lane):
+    current_collection = util.current_collection(collection_lane)
     data = [a for a in current_collection.find({})]
-    next_collection = util.go_to_next_stage()
+    next_collection = util.go_to_next_stage(collection_lane)
     new_data = list()
 
     street_types = defaultdict(set)
@@ -104,10 +104,10 @@ def standardize_addresses():
     return street_types
 
 
-def standardize_phone_numbers():
-    current_collection = util.current_collection()
-    data = current_collection.find()
-    next_collection = util.go_to_next_stage()
+def standardize_phone_numbers(collection_lane):
+    current_collection = util.current_collection(collection_lane)
+    data = current_collection.find({})
+    next_collection = util.go_to_next_stage(collection_lane)
     new_data = list()
     non_number = re.compile(r"\D+")
     non_number_start_end = re.compile(r"(^\D+)|(\D+$)")
@@ -128,10 +128,10 @@ def standardize_phone_numbers():
     next_collection.insert_many(new_data)
 
 
-def standardize_cities():
-    current_collection = util.current_collection()
+def standardize_cities(collection_lane):
+    current_collection = util.current_collection(collection_lane)
     data = current_collection.find({})
-    next_collection = util.go_to_next_stage()
+    next_collection = util.go_to_next_stage(collection_lane)
     new_data = list()
 
     replace_dict = {
@@ -158,10 +158,10 @@ def standardize_cities():
     next_collection.insert_many(new_data)
 
 
-def standardize_restaurant_types():
-    current_collection = util.current_collection()
+def standardize_restaurant_types(collection_lane):
+    current_collection = util.current_collection(collection_lane)
     data = current_collection.find({})
-    next_collection = util.go_to_next_stage()
+    next_collection = util.go_to_next_stage(collection_lane)
     new_data = list()
 
     containing_numbers = re.compile(r" \d.*\d ")
