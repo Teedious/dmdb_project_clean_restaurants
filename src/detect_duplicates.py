@@ -1,25 +1,20 @@
-from collections import defaultdict
-from pprint import pprint
+import py_stringmatching as string_matching
 
 from src import util
-from src import aggregate_mongodb
-import py_stringmatching as sm
-from timeit import default_timer as timer
+
+global_possible_duplicates = {}
 
 
-possible_duplicates = {}
-
-
-def audit_duplicates(collection_lane):
+def get_similarity_values(collection_lane):
     tokenized_data = get_tokenized_data(list(util.current_collection(collection_lane).find({})))
     num_entries = len(tokenized_data)
     entry_comparisons = 4
     similarity_values = {}
-    similarity_measures = {}
+    string_matchers = {}
     measured_fields = [util.phone_field, util.address_field, util.name_field]
 
     for field in util.field_names:
-        similarity_measures[field] = sm.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
+        string_matchers[field] = string_matching.SoftTfIdf(get_corpus_list(tokenized_data, field), threshold=0.9)
 
     for field in measured_fields:
 
@@ -33,23 +28,30 @@ def audit_duplicates(collection_lane):
             if i_id not in similarity_values:
                 similarity_values[i_id] = {}
 
-            for j in range(i+1, min(i+1 + entry_comparisons, num_entries)):
+            for j in range(i + 1, min(i + 1 + entry_comparisons, num_entries)):
                 j_id = tokenized_data[j][util.id_field][0]
                 if j_id not in similarity_values[i_id]:
                     similarity_values[i_id][j_id] = {}
 
                 for field_to_check in measured_fields:
                     if field_to_check not in similarity_values[i_id][j_id]:
-                        similarity_values[i_id][j_id][field_to_check] = similarity_measures[field_to_check].get_raw_score(
-                            tokenized_data[i][field_to_check],
-                            tokenized_data[j][field_to_check])
+                        similarity_values[i_id][j_id][field_to_check] = \
+                            string_matchers[field_to_check].get_raw_score(tokenized_data[i][field_to_check],
+                                                                          tokenized_data[j][field_to_check])
     return similarity_values
 
 
-def get_duplicates(collection_lane,a, b, c):
-    global possible_duplicates
-    if collection_lane not in possible_duplicates:
-        possible_duplicates[collection_lane] = audit_duplicates(collection_lane)
+def reset_duplicates(collection_lane):
+    global global_possible_duplicates
+    global_possible_duplicates.pop(collection_lane,None)
+
+
+def get_duplicates(collection_lane, a, b, c):
+    global global_possible_duplicates
+    if collection_lane not in global_possible_duplicates:
+        global_possible_duplicates[collection_lane] = get_similarity_values(collection_lane)
+
+    possible_duplicates = global_possible_duplicates[collection_lane]
     duplicates = set()
     for key1 in possible_duplicates:
         for key2 in possible_duplicates[key1]:
@@ -61,7 +63,7 @@ def get_duplicates(collection_lane,a, b, c):
 
 
 def get_tokenized_data(data):
-    an_tokenizer = sm.AlphanumericTokenizer()
+    an_tokenizer = string_matching.AlphanumericTokenizer()
     tokenized_data = []
     for entry in data:
         new_entry = {}

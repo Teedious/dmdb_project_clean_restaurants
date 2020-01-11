@@ -1,15 +1,13 @@
 import csv
 import os
 import subprocess
-from pymongo import MongoClient
+
 from src import util
 
-client = MongoClient(util.mongodb_server)
-restaurants_db = client[util.restaurants_db]
 fieldnames = None
 
 
-def import_restaurants_data(file_path, collection_lane=util.standard_collection):
+def import_restaurants_data(file_path, collection_lane):
     cur_collection = util.current_collection(collection_lane)
     if 0 < cur_collection.estimated_document_count():
         print("Data already imported. Deleting {} entries.".format(cur_collection.estimated_document_count()))
@@ -22,11 +20,11 @@ def import_restaurants_data(file_path, collection_lane=util.standard_collection)
     print("done ({} entries)".format(cur_collection.estimated_document_count()))
 
 
-def init_cleaning(file_path, collection_lane=util.standard_collection):
+def init_cleaning(file_path, collection_lane):
     util.current_stage[collection_lane] = 0
-    for stage in restaurants_db.list_collection_names(
+    for stage in util.get_restaurant_database().list_collection_names(
             filter={"name": {"$regex": r"^{}\d+".format(collection_lane)}}):
-        restaurants_db.drop_collection(stage)
+        util.get_restaurant_database().drop_collection(stage)
 
     import_restaurants_data(file_path, collection_lane)
 

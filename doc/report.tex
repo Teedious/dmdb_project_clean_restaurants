@@ -14,11 +14,24 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage[style=ieee]{biblatex}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{environ}
 \usepackage{hyperref}
 \bibliography{bibfile}
 
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\pgfplotsset{width=\textwidth,compat=1.14}\usepgfplotslibrary{statistics}
+
+%\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\makeatletter
+\pgfplotsset{
+    boxplot/hide outliers/.code={
+        \def\pgfplotsplothandlerboxplot@outlier{}%
+    }
+}
+\makeatother
 \begin{document}
 
 \title{Cleaning and Visualizing a dirty set of restaurant data}
@@ -34,7 +47,7 @@ florian.loher@st.oth-regensburg.de}
 \maketitle
 
 \begin{abstract}
-This document shows a possible approach to cleaning an visualizing the dirty dataset provided at \url{https://hpi.de/naumann/projects/repeatability/datasets/restaurants-dataset.html}. It describes how the data is first audited, then cleaned in MongoDB, removing duplicates, using a common search engine to find correct restaurant names and standardizing road and city names. Lastly the data is visualized by generating a website that contains an OSM map and markers indicating the location of each restaurant.
+This document shows a possible approach to cleaning and visualizing the dirty dataset provided at \url{https://hpi.de/naumann/projects/repeatability/datasets/restaurants-dataset.html}. It describes how the data is first audited, then cleaned in MongoDB, removing duplicates, using a common search engine to find correct restaurant names and standardizing road and city names. Lastly the data is visualized by generating a website that contains an OSM map and markers indicating the location of each restaurant.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -42,25 +55,173 @@ MongoDB, Data cleaning
 \end{IEEEkeywords}
 
 \section{Introduction}
-Data cleaning, also referred to as data scrubbing or data cleansing, is a research field concerned with improving the quality of faulty data. Typical aspects that are sought to be improved are the amount of duplicates, type errors or inconsistencies in the data\cite{Bilenko.2003}
+Big data is a rapidly growing field of research that already gained overwhelming interest in the general public. The amount of data is increasing at an exponential rate an is likely to grow further at this rate. To be able to leverage the power of data, the need for ways to clean is as high as ever.
 
+Data cleaning, also referred to as data scrubbing or data cleansing, is a research field concerned with improving the quality of faulty data. Typical aspects that are sought to be improved are the amount of duplicates, type errors or inconsistencies\cite{Bilenko.2003}.
+
+In this article I am going to outline a possible approach to detecting duplicates in a dataset of 864 
+restaurants\footnote{Restaurant data provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants.tsv}}.
+I first audit the data. Then  I generate a training set, standardize fields and choose \emph{SoftTF-IDF} string matching measure with \emph{Jaro-Distance} as sub measure as the algorithm for duplicate detection. After creating a gold standard for the training set I train the thresholds for restaurant name, phone number and address similarity that determine if two records will be declared duplicates. Lastly the detection algorithm is run on the test data and compared to the gold 
+standard\footnote{Gold standard provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants_DPL.tsv}}.
+Using and comparing different sizes of training data I show that even with a training set $10\%$  the size of the test data (86 records, 22 of which are part of duplicates) a recall of $\approx86\%$ is with a precision of $\approx95\%$ typically achieved.
+
+In section \ref{basics} I am going to introduce basic terminology concerning data cleaning and describe the string-matching algorithms I use. Section 
 %% Outline
-\section{Basics}
-\subsection{Data Cleaning Fundamentals}
-\subsection{Stringmatching}
+\section{Basics}\label{basics}
+\subsection{Duplicate Detection Fundamentals}
+\subsection{String matching}
+Duplicate detection relies on the matching of strings i.e.\ comparing fields of distinct records in a given dataset and calculating how similar they are, based on a defined measure.
 
+Token-based measures are typically optimized to handle rotation errors. Frequent differences between fields that represent the same entity are for example swapping first and last name, or having a title prepended or put at the end. By splitting the strings into tokens and comparing the resulting sets of tokens such rotations cease to impact those measures. The token-based string matching algorithm \emph{SoftTF-IDF} (soft term frequency, indirect document frequency) 
+\subsection{Matching algorithms for names and addresses}
+
+\section{Auditing and data preparation}\label{prep}
+Before trying to find duplicate data in any given dataset most data cleaning approaches start with a phase of auditing and preparing the data. This includes but is not limited to discovering which types of fields are present in the data and removing unnecessary characters from fields.
+
+\section{Generation of training data}\label{train_gen}
+
+\section{Choice of string-matching algorithm SoftTF-IDF}\label{matching}
+
+\section{Training with training data}\label{training}
+
+\section{Detection of duplicates in restaurant data}\label{duplicate_detection}
+
+\section{Comparison of different sizes of training data}\label{comparison}
+
+\section{Conclusions}
+\begin{figure*}
+	\begin{subfigure}[t]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}
+			[
+				height = 6cm,
+				xmin = 0.65,
+				xmax = 1.01,
+				xlabel = recall,
+				ylabel = training data size (\%),
+				ytick = {1,2,3,4,5,6,7,8,9,10},
+				yticklabels = {10,20,30,40,50,60,70,80,90,100},
+				boxplot/draw direction=x
+			]
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_1.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_2.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_3.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_4.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_5.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_6.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_7.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_8.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_9.txt};
+				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_10.txt};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Recall of training data with different sizes of training data and optimal thresholds}
+	\end{subfigure}
+	\begin{subfigure}[t]{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}
+			[
+				height = 6cm,
+				xmin = 0.65,
+				xmax = 1.01,
+				xlabel = recall,
+				ylabel = training data size (\%),
+				ytick = {1,2,3,4,5,6,7,8,9,10},
+				yticklabels = {10,20,30,40,50,60,70,80,90,100},
+				boxplot/draw direction=x
+			]
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_1.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_2.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_3.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_4.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_5.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_6.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_7.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_8.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_9.txt};
+				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_10.txt};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Recall of test data with different sizes of training data and optimal thresholds}
+	\end{subfigure}
+\end{figure*}
+
+\begin{figure*}
+	\begin{subfigure}{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}
+			[
+				height=6cm,
+				xmin = 0.65,
+				xmax = 1.01,
+				xlabel = precision,
+				ylabel = training data size (\%),
+				ytick = {1,2,3,4,5,6,7,8,9,10},
+				yticklabels = {10,20,30,40,50,60,70,80,90,100},
+				boxplot/draw direction=x
+			]
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
+				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Precision of training data with different sizes of training data and optimal thresholds}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\begin{tikzpicture}
+			\begin{axis}
+			[
+				height=6cm,
+				xmin = 0.65,
+				xmax = 1.01,
+				xlabel = precision,
+				ylabel = training data size (\%),
+				ytick = {1,2,3,4,5,6,7,8,9,10},
+				yticklabels = {10,20,30,40,50,60,70,80,90,100},
+				boxplot/draw direction=x
+			]
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
+				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Precision of test data with different sizes of training data and optimal thresholds}
+	\end{subfigure}
+		
+\end{figure*}
+
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}
+		[
+			legend pos=north west,
+			height=6cm,
+			width=7cm,
+		]
+			\addplot+  table [x=x,y=phone_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{phone}
+			\addplot+  table [x=x,y=name_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{name}
+			\addplot+  table [x=x,y=address_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{address}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
 
 \printbibliography
 
-\begin{thebibliography}{00}
-\bibitem{Sarawagi} IEEE Data Eng. Bull., S. Sarawagi, ed., special issue on data
-cleaning, vol. 23, no. 4, Dec. 2000.
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, \enquote{On certain integrals of Lipschitz-Hankel type involving products of Bessel functions}, Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
-\end{thebibliography}
 \end{document}

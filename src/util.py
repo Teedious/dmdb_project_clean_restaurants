@@ -1,21 +1,23 @@
 import math
+import os
+import random
 
 import pymongo
 from pymongo import MongoClient
-import random
-from src import import_export
-import os
 
-# mongodb_server = 'mongodb://localhost:27017/'
-mongodb_server = "mongodb+srv://wmdb_temp:8EDM3sv5WiMBr26K@wmdb-01-7b21x.mongodb.net"
+from src import import_export
+
+mongodb_server = 'mongodb://localhost:27017'
+# mongodb_server = "mongodb+srv://wmdb_temp:8EDM3sv5WiMBr26K@wmdb-01-7b21x.mongodb.net"
 restaurants_db = "restaurants_db"
 imported_collection = "imported"
 temp_collection = "temp_collection"
 current_stage = {}
-training_set_size = 100
+training_set_size = 86 * 3
 standard_collection = "cleaning_stage"
-collection_lane_a = "collection_lane_a"
-collection_lanes = [standard_collection, collection_lane_a]
+training_collection_lane = "training_stage"
+random_gen_lane = "collection_lane_a"
+collection_lanes = [standard_collection, random_gen_lane]
 
 gold_standard_file = "./data/restaurants_DPL.tsv"
 training_set_file = "./data/restaurants_training.tsv"
@@ -89,48 +91,47 @@ def invert_dictionary_lists(dictionary):
     return ret
 
 
-def choose_random_values_once():
-    if os.path.isfile(training_set_file):
+def generate_training_set_once(output_file, gold_standard_output_file, force_new_set=False):
+    if os.path.isfile(output_file) and not force_new_set:
         return
 
-    import_export.init_cleaning(restaurants_file, collection_lane_a)
-    num_entries = current_collection().estimated_document_count()
-    duplicate_possibilites = list(range(1,112+1))
-    possibilities = list(range(1, num_entries+1))
-    duplicate_ratio = len(duplicate_possibilites*2)/len(possibilities)
+    import_export.init_cleaning(restaurants_file, random_gen_lane)
+    num_entries = current_collection(random_gen_lane).estimated_document_count()
+    duplicate_possibilites = list(range(1, 112 + 1))
+    possibilities = list(range(1, num_entries + 1))
+    duplicate_ratio = len(duplicate_possibilites * 2) / len(possibilities)
     choices = []
     choices_import = []
 
-    choose_duplicates = math.floor(training_set_size*duplicate_ratio/2)*2
-    duplicate_ratio *=2
+    choose_duplicates = math.floor(training_set_size * duplicate_ratio / 2) * 2
+    duplicate_ratio *= 2
 
-    for i in range(0, choose_duplicates//2):
+    for i in range(0, choose_duplicates // 2):
         choice = random.choice(duplicate_possibilites)
 
         duplicate_possibilites.remove(choice)
-        possibilities.remove(choice*2-1)
-        possibilities.remove(choice*2)
+        possibilities.remove(choice * 2 - 1)
+        possibilities.remove(choice * 2)
 
-        choices.append(str(choice*2-1))
-        choices.append(str(choice*2))
+        choices.append(str(choice * 2 - 1))
+        choices.append(str(choice * 2))
 
-        choices_import.append({"id1":str(choice*2-1), "id2":str(choice*2)})
+        choices_import.append({"id1": str(choice * 2 - 1), "id2": str(choice * 2)})
 
     temp_coll = get_temp_collection()
-    temp_coll.insert_many(sorted(choices_import,key=lambda x: int(x["id1"])))
-    import_export.export_restaurants_data(training_set_gold_standard_file, temp_coll.name, ["id1","id2"])
+    temp_coll.insert_many(sorted(choices_import, key=lambda x: int(x["id1"])))
+    import_export.export_restaurants_data(gold_standard_output_file, temp_coll.name, ["id1", "id2"])
 
-    for i in range(0,training_set_size-choose_duplicates):
+    for i in range(0, training_set_size - choose_duplicates):
         choice = random.choice(possibilities)
         possibilities.remove(choice)
         choices.append(str(choice))
 
-    a = [a for a in current_collection().find({id_field: {"$in": choices}})]
+    a = [a for a in current_collection(random_gen_lane).find({id_field: {"$in": choices}})]
 
-    go_to_next_stage(collection_lane_a).insert_many(a)
+    go_to_next_stage(random_gen_lane).insert_many(a)
 
-    import_export.export_restaurants_data(training_set_file, current_collection_name(collection_lane_a), field_names)
-
+    import_export.export_restaurants_data(output_file, current_collection_name(random_gen_lane), field_names)
 
 
 def get_gold_standard(file_path):
