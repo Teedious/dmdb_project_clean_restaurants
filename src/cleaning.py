@@ -65,7 +65,7 @@ def train(gold_standard_file, collection_lane):
     return training_result
 
 
-def test(gold_standard_file, collection_lane, tr_result, result_file):
+def test(gold_standard_file, collection_lane, tr_result, verbose):
     real_duplicates = util.get_gold_standard(gold_standard_file)
     found_duplicates = detect_duplicates.get_duplicates(collection_lane, tr_result[0], tr_result[1], tr_result[2])
 
@@ -73,6 +73,14 @@ def test(gold_standard_file, collection_lane, tr_result, result_file):
 
     precision = len(intersect) / len(found_duplicates)
     recall = len(intersect) / len(real_duplicates)
+    if verbose:
+        print("pht, nmt, adt, trpre, trrec, tepre, terec")
+        print("{:3.1f}, {:3.1f}, {:3.1f}, {:5.3f}, {:5.3f}, {:5.3f}, {:5.3f}\n".format(tr_result[0],
+                                                                                       tr_result[1],
+                                                                                       tr_result[2],
+                                                                                       tr_result[3],
+                                                                                       tr_result[4],
+                                                                                       precision,
+                                                                                       recall))
 
     return (tr_result, precision, recall)
-    print("precision {}, recall {}".format(precision, recall))
