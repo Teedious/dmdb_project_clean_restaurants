@@ -46,7 +46,6 @@ def get_temp_collection():
     MongoClient(mongodb_server)[restaurants_db].drop_collection(temp_collection)
     return MongoClient(mongodb_server)[restaurants_db][temp_collection]
 
-
 def current_collection(collection_lane=standard_collection) -> pymongo.collection.Collection:
     return MongoClient(mongodb_server)[restaurants_db][current_collection_name(collection_lane)]
 

@@ -40,8 +40,8 @@ def standardize_addresses(collection_lane):
                        "tenth": "10th",
                        "eleventh": "11th",
                        "twelfth": "12th"}
+    written_numbers_re = re.compile(r"(?P<num>{})".format("|".join(written_numbers.keys())))
 
-    written_num_re = re.compile(r"(?P<num>{})".format("|".join(written_numbers.keys())))
     abbreviations = "|".join(util.invert_dictionary_lists(util.street_suffix_abbreviations))
     abbr_replacement = re.compile(r" (?P<abbr>{})\.?( |$)".format(abbreviations))
     abbr_lookup = util.invert_dictionary_lists(util.street_suffix_abbreviations)
@@ -61,24 +61,20 @@ def standardize_addresses(collection_lane):
         if result:
             address = address[:result.start()]
 
-        replacements = [abbr_replacement, written_num_re]
         results = abbr_replacement.finditer(address)
         for result in results:
             address_1 = address[:result.start()]
             address_2 = abbr_lookup[result.group('abbr')]
             address_3 = address[result.end():]
-
             address_1 = address_1.strip() + " "
             address_3 = " " + address_3 if address_3 != "" else ""
-
             address = address_1 + address_2 + address_3
 
-        results = written_num_re.finditer(address)
+        results = written_numbers_re.finditer(address)
         for result in results:
             address_1 = address[:result.start()]
             address_2 = written_numbers[result.group('num')]
             address_3 = address[result.end():]
-
             address = address_1 + address_2 + address_3
 
         result = double_space.search(address)
@@ -91,8 +87,8 @@ def standardize_addresses(collection_lane):
 
         entry[util.address_field] = address
         new_data.append(entry)
+
     next_collection.insert_many(new_data)
-    pprint.pprint(util.current_collection().find_one({util.id_field: "714"}))
 
     not_expected_count = sum(map(lambda x: len(street_types[x]), street_types))
     total_count = len(data)

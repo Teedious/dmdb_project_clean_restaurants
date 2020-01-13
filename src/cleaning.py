@@ -74,12 +74,5 @@ def test(gold_standard_file, collection_lane, tr_result, result_file):
     precision = len(intersect) / len(found_duplicates)
     recall = len(intersect) / len(real_duplicates)
 
+    return (tr_result, precision, recall)
     print("precision {}, recall {}".format(precision, recall))
-    with open(result_file, "a") as f:
-        f.write("{:3.1f}, {:3.1f}, {:3.1f}, {:5.3f}, {:5.3f}, {:5.3f}, {:5.3f}\n".format(tr_result[0],
-                                                                                         tr_result[1],
-                                                                                         tr_result[2],
-                                                                                         tr_result[3],
-                                                                                         tr_result[4],
-                                                                                         precision,
-                                                                                         recall))

@@ -1,0 +1,22 @@
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}
+		[
+			legend pos=north west,
+			height=6cm,
+			width=7cm,
+			xmax=1,
+			xmin=0,
+			yminorgrids=true,
+			ymajorgrids=true,
+			minor y tick num=3,
+		]
+			\addplot+  table [y=x,x=phone_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{phone}
+			\addplot+ [mark=*] table [y=x,x=name_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{name}
+			\addplot+ [mark=*] table [y=x,x=address_threshold, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{address}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}

@@ -1,3 +1,4 @@
+% !TeX spellcheck = en_GB
 \documentclass[conference]{IEEEtran}
 %\IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
@@ -6,16 +7,18 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
-%\usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{csquotes}
+\usepackage{booktabs}
 \usepackage{algorithmic}
+\usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage[style=ieee]{biblatex}
+\usepackage[style=ieee, backend=biber]{biblatex}
 \usepackage{pgfplots}
 \usepackage{subcaption}
+\usepackage{multirow,tabularx}
 \usepackage{environ}
 \usepackage{hyperref}
 \bibliography{bibfile}
@@ -27,11 +30,14 @@
 
 \makeatletter
 \pgfplotsset{
-    boxplot/hide outliers/.code={
-        \def\pgfplotsplothandlerboxplot@outlier{}%
-    }
+	boxplot/.cd,
+	every median/.style={red}
 }
+\pgfplotsset{grid style={help lines}}
+\pgfplotsset{minor grid style={very thin, dotted}}
+\pgfplotsset{major grid style={thick}}
 \makeatother
+
 \begin{document}
 
 \title{Cleaning and Visualizing a dirty set of restaurant data}
@@ -63,24 +69,74 @@ In this article I am going to outline a possible approach to detecting duplicate
 restaurants\footnote{Restaurant data provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants.tsv}}.
 I first audit the data. Then  I generate a training set, standardize fields and choose \emph{SoftTF-IDF} string matching measure with \emph{Jaro-Distance} as sub measure as the algorithm for duplicate detection. After creating a gold standard for the training set I train the thresholds for restaurant name, phone number and address similarity that determine if two records will be declared duplicates. Lastly the detection algorithm is run on the test data and compared to the gold 
 standard\footnote{Gold standard provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants_DPL.tsv}}.
-Using and comparing different sizes of training data I show that even with a training set $10\%$  the size of the test data (86 records, 22 of which are part of duplicates) a recall of $\approx86\%$ is with a precision of $\approx95\%$ typically achieved.
+Using and comparing different sizes of training data I show that even with a training set $10\%$  the size of the test data (86 records, 22 of which are part of duplicates) a recall of $\approx86\%$ with a precision of $\approx95\%$ is typically achieved.
 
+\subsection{Related work}
+\textcite{Vogel.2014} describe the limitations of the restaurant data set and its gold standard for comparisons of certain duplicate detection algorithms.
+\textcite{Bilenko.2003b} use the data of restaurants to evaluate the performance of their proposed two-level learning algorithm for duplicate detection, \emph{MARLIN} (Multiply Adaptive Record Linkage with INduction).
+
+\subsection{Outline}
 In section \ref{basics} I am going to introduce basic terminology concerning data cleaning and describe the string-matching algorithms I use. Section 
 %% Outline
-\section{Basics}\label{basics}
-\subsection{Duplicate Detection Fundamentals}
-\subsection{String matching}
-Duplicate detection relies on the matching of strings i.e.\ comparing fields of distinct records in a given dataset and calculating how similar they are, based on a defined measure.
+\section{Duplicate detection}\label{basics}
+A major field of research is duplicate detection i.e.\ trying to find methods that recognize if two distinct records in a given data set actually represent the same real world entity. Such pairs of records are called duplicates. The degree to which an algorithm, method or process is able to detect duplicates can be measured if a gold standard addressing the relevant data set is available. A gold standard is a complete list of every duplicate that exists in the data and therefore also a complete list of all non duplicates.
+The way of comparing the algorithm to the gold standard is by calculating its precision and recall. Precision is defined as $\frac{|TP|}{|TP|+|FP|}$ where $|TP|$ is the number of records both the algorithm and the gold standard recognize as duplicates (true positives) and $|FP|$ is the number of records the algorithm recognizes as duplicates but the gold standard does not (false positives). Recall is defined as $\frac{|TP|}{|TP|+|FN|}$ where $|TP|$ is the same as before and $|FN|$ is the number of true duplicates the algorithm does not find.
 
-Token-based measures are typically optimized to handle rotation errors. Frequent differences between fields that represent the same entity are for example swapping first and last name, or having a title prepended or put at the end. By splitting the strings into tokens and comparing the resulting sets of tokens such rotations cease to impact those measures. The token-based string matching algorithm \emph{SoftTF-IDF} (soft term frequency, indirect document frequency) 
+\subsection{String matching}
+Duplicate detection relies on the matching of strings i.e.\ comparing fields of distinct records in a given dataset and calculating how similar they are, based on a chosen measure.
+
+Token-based measures are typically optimized to handle differences where substrings are swapped or rotated. Frequent differences between fields that represent the same entity are for example swapping first and last name, or having a title prepended or put at the end. By splitting the strings into tokens and comparing the resulting sets of strings these rotations cease to impact those measures.
+
+WHIRL, a token-based similarity measure proposed by \cite{Cohen.1998} additionally utilizes the \emph{TF-IDF} (term frequency, indirect document frequency) weighing scheme. This also prioritizes terms that appear rarely in the document giving credit to the thought that strings are probably semantically equivalent if they share a lot of defining terms whereas frequent terms, such as \emph{street} in a field that represents an address, are less likely to point to duplicates.
+
+A further subtlety is introduced by \cite{Bilenko.2003} with the measure \emph{SoftTF-IDF}. Instead of needing exact matches for the tokens like WHIRL, SoftTF-IDF utilizes a character-based similarity measure to calculate similiarity values for tokens that are not exact matches.
+
+Character-based similarity measures often handle typing errors very well and are typically optimized for specific types of strings such as names. 
 \subsection{Matching algorithms for names and addresses}
 
 \section{Auditing and data preparation}\label{prep}
-Before trying to find duplicate data in any given dataset most data cleaning approaches start with a phase of auditing and preparing the data. This includes but is not limited to discovering which types of fields are present in the data and removing unnecessary characters from fields.
+Before trying to find duplicate data in any given dataset most data cleaning approaches start with a phase of preparing the data. Data preparation usually contains the steps parsing, transformation and standardization. This includes but is by far not limited to discovering which types of fields are present in the data and removing unnecessary characters from fields. 
+
+In the case of the restaurants data I am looking at a quick audit reveals that entries in the \enquote{phone} fields do not conform to a common format. The phone field of record 97 is \emph{212/627-8273} while record 98 contains the value \emph{212-627-8273}. The separation characters between numbers are not uniform. This can be observed throughout the entirety of the data set. A non extensive record of further inconsistencies can be found in table \ref{rec_faults}. 
+
+In the parsing and transformation phase I copy the data to an instance of \emph{MongoDB}\footnote{MongoDB is a document database. For more information visit \url{https://www.mongodb.com/}} in order to make the data easier accessible in the following stages. Each row of the original data is transformed into a record in the database. In MongoDB the equivalent to tables of relational databases are collections. Each step of my data cleaning process creates a new collection with the updated data.
+
+The process of standardization is split up, targeting each field of the records separately. Because of that the order in which the fields are standardized is irrelevant to the resulting data.
+
+Each field is standardized by the use of different regular expressions that are suited to find the irregularities in the field. Furthermore replacements are done using dictionaries of standardized values. For example the address field contains street types which are sometimes abbreviated. One regular expression is used to find all abbreviations in a field and a dictionary containing street types and their common abbreviations enables the replacement of each instance by its non abbreviated form.
+
+\begin{table}
+	\begin{tabularx}{\columnwidth}{lr@{ }XX}
+	\toprule
+	field &&type of inconsistency & example \\
+	\midrule
+	city & --&irregular use of abbreviations & sometimes \emph{la} instead of \emph{los angeles}\\
+		 & --& use of city district name as city name& \emph{hollywood} instead of \emph{los angeles}\\
+	\midrule
+	type & --& irregular use of abbreviations  & sometimes \emph{bbq} instead of \emph{barbecue}\\
+		 & --& use of different separators for types & \emph{greek and middle eastern} and \emph{russian/german})\\
+	\midrule
+	address & --&irregular use of abbreviations & sometimes \emph{blvd} instead of \emph{boulevard}, sometimes \emph{ninth} instead of \emph{9th}\\
+	 & --& presence of directions & \emph{60 w. 55th st. between 5th and 6th ave.}\\
+	 & --& irregular choice of abbreviations & \emph{blvd} or \emph{blv}\\
+	\midrule
+	phone & --& irregular use of separation characters  & sometimes \emph{212/627-8273} instead of \emph{212-627-8273}\\
+	\bottomrule
+	\end{tabularx}
+	\caption{Types of inconsistencies present in restaurant data}\label{rec_faults}
+\end{table}
 
 \section{Generation of training data}\label{train_gen}
+Since similarity measures typically return a value between 0 and 1 thresholds must be set for which two records are considered semantically equivalent. One way of finding such thresholds is to set them according to prior experience. A similar approach is the use of training data. In this case I am using a subsets of the original data of different sizes. In section \ref{comparison} I will compare the effect the size of the training data has in regards to precision and recall. 
 
+The subsets are chosen randomly with the restriction of including duplicates at the same ratio as in the complete data set. This is necessary as random pairs of records are very unlikely to be duplicates. Considering for example a set of $100$ records containing $50$ pairs of duplicates. Regardless which records are chosen both of them are going to be part of a duplicate pair. The probability that both records are part of the same duplicate pair is $P(x \in D) \cdot P(y \equiv x) = 1 \cdot \frac{1}{99} \approx 1,01\%$, where $P(x \in D)$ it the probability that a randomly chosen record $x$ is part of a duplicate and $P(y \equiv x)$ is the probability that the two randomly chosen records $x,y$ are part of the same duplicate. This calculation shows that a completely random subset is likely to contain a duplicate ration that is considerably lower than the original data. However it is exactly those duplicates that greatly contribute to the value of the ratio.
+Therefore it is necessary to include at least some duplicates in the training set deliberately.
+
+Although finding all duplicates in a data set is very difficult and most often requires a lot of manual work, finding a small subset of duplicates is comparatively easy since not all pairs of records need to be considered. One way of finding duplicates may be sorting the records and comparing adjacent records. This process is deliberately left out in this work. Instead the provided gold standard is utilized to ensure the same ratio of duplicates in the training set as in the original data.
 \section{Choice of string-matching algorithm SoftTF-IDF}\label{matching}
+As described in section \ref{basics} different measures exist for calculating the similarity between fields of records. In order to mitigate the effect of swapped elements in the string a token-based measure is advantageous. The TF-IDF measure also prioritizes terms that appear rarely in the document giving credit to the thought that strings are probably semantically equivalent if they share a lot of defining terms whereas frequent terms, such as \emph{street} in a field that represents an address, are less likely to point to duplicates\cite{Cohen.1998}.
+
+Furthermore to decrease the risk of terms not matching because of typing errors or irregular elements that were not targeted by the standardization process the comparison between terms is itself done by a similarity measure, the JaroDistance in this case. The resulting SoftTF-IDF measure is implemented by the python library \emph{py\_stringmatching}\footnote{More information on py\_stringmatching  can be found at \url{https://sites.google.com/site/anhaidgroup/projects/magellan/py\_stringmatching}}
 
 \section{Training with training data}\label{training}
 
@@ -89,138 +145,12 @@ Before trying to find duplicate data in any given dataset most data cleaning app
 \section{Comparison of different sizes of training data}\label{comparison}
 
 \section{Conclusions}
-\begin{figure*}
-	\begin{subfigure}[t]{\textwidth}
-		\begin{tikzpicture}
-			\begin{axis}
-			[
-				height = 6cm,
-				xmin = 0.65,
-				xmax = 1.01,
-				xlabel = recall,
-				ylabel = training data size (\%),
-				ytick = {1,2,3,4,5,6,7,8,9,10},
-				yticklabels = {10,20,30,40,50,60,70,80,90,100},
-				boxplot/draw direction=x
-			]
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_1.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_2.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_3.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_4.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_5.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_6.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_7.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_8.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_9.txt};
-				\addplot [boxplot] table [y=training_data_recall, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Recall of training data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-	\begin{subfigure}[t]{\textwidth}
-		\begin{tikzpicture}
-			\begin{axis}
-			[
-				height = 6cm,
-				xmin = 0.65,
-				xmax = 1.01,
-				xlabel = recall,
-				ylabel = training data size (\%),
-				ytick = {1,2,3,4,5,6,7,8,9,10},
-				yticklabels = {10,20,30,40,50,60,70,80,90,100},
-				boxplot/draw direction=x
-			]
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_1.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_2.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_3.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_4.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_5.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_6.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_7.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_8.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_9.txt};
-				\addplot [boxplot] table [y=test_data_recall, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Recall of test data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-\end{figure*}
 
-\begin{figure*}
-	\begin{subfigure}{\textwidth}
-		\begin{tikzpicture}
-			\begin{axis}
-			[
-				height=6cm,
-				xmin = 0.65,
-				xmax = 1.01,
-				xlabel = precision,
-				ylabel = training data size (\%),
-				ytick = {1,2,3,4,5,6,7,8,9,10},
-				yticklabels = {10,20,30,40,50,60,70,80,90,100},
-				boxplot/draw direction=x
-			]
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Precision of training data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\begin{tikzpicture}
-			\begin{axis}
-			[
-				height=6cm,
-				xmin = 0.65,
-				xmax = 1.01,
-				xlabel = precision,
-				ylabel = training data size (\%),
-				ytick = {1,2,3,4,5,6,7,8,9,10},
-				yticklabels = {10,20,30,40,50,60,70,80,90,100},
-				boxplot/draw direction=x
-			]
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Precision of test data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-		
-\end{figure*}
+\input{recall_figure}
+\input{precision_figure}
+\input{thresholds_figure}
 
-\begin{figure}
-	\begin{tikzpicture}
-		\begin{axis}
-		[
-			legend pos=north west,
-			height=6cm,
-			width=7cm,
-		]
-			\addplot+  table [x=x,y=phone_threshold, col sep=comma] {../data/results/summary.txt};
-			\addlegendentry{phone}
-			\addplot+  table [x=x,y=name_threshold, col sep=comma] {../data/results/summary.txt};
-			\addlegendentry{name}
-			\addplot+  table [x=x,y=address_threshold, col sep=comma] {../data/results/summary.txt};
-			\addlegendentry{address}
-		\end{axis}
-	\end{tikzpicture}
-\end{figure}
+
 
 \printbibliography
 
