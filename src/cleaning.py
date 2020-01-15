@@ -99,7 +99,7 @@ def get_clean_collection(data_file, collection_lane):
         clean(data_file, collection_lane)
 
 
-def run_duplicate_detection(recreate_training_set=False, verbose=True):
+def run_duplicate_detection(recreate_training_set=True, verbose=True):
     util.generate_training_set_once(util.training_set_file, util.training_set_gold_standard_file, recreate_training_set)
 
     clean(util.training_set_file, util.training_collection_lane)
