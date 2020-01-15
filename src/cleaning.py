@@ -85,3 +85,30 @@ def test(gold_standard_file, collection_lane, tr_result, verbose):
                                                                                        recall))
 
     return (tr_result, precision, recall)
+
+
+def get_clean_collection(data_file, collection_lane):
+    lanes = []
+    for coll in util.get_restaurant_database().list_collection_names(
+            filter={"name": {"$regex": r"^{}\d+".format(collection_lane)}}):
+        coll: str
+        coll = coll.replace(collection_lane, "")
+        lanes.append(int(coll))
+
+    if len(lanes) > 0:
+        util.current_stage[collection_lane] = max(lanes)
+    else:
+        clean(data_file, collection_lane)
+
+
+def run_duplicate_detection(recreate_training_set=False, verbose=True):
+    util.generate_training_set_once(util.training_set_file, util.training_set_gold_standard_file, recreate_training_set)
+
+    clean(util.training_set_file, util.training_collection_lane)
+
+    tr = train(util.training_set_gold_standard_file, util.training_collection_lane)
+    print(tr)
+
+    get_clean_collection(util.restaurants_file, util.standard_collection)
+
+    return test(util.gold_standard_file, util.standard_collection, tr, verbose)
