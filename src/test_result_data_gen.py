@@ -67,7 +67,7 @@ def cycle(times, summarize=False):
                 summary.write(out_string)
 
 
-def create_documentation_data(size):
+def create_test_result_data(size):
     for i in range(0, size):
         cycle(1)
     cycle(0, summarize=True)
