@@ -57,8 +57,6 @@ def train(gold_standard_file, collection_lane):
                 val = precision * recall
 
                 train_temp[val] = (phone_threshold, name_threshold, address_threshold, precision, recall)
-
-        print(i)
     t1 = list(train_temp)
     best = max(t1)
     training_result = train_temp[best]
