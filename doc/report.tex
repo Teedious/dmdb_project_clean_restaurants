@@ -11,11 +11,11 @@
 \usepackage{csquotes}
 \usepackage{booktabs}
 \usepackage{algorithmic}
-\usepackage{enumitem}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage[style=ieee, backend=biber]{biblatex}
+\usepackage[style=ieee, backend=biber,maxcitenames=1,mincitenames=1]{biblatex}
 \usepackage{pgfplots}
 \usepackage{subcaption}
 \usepackage{multirow,tabularx}
@@ -23,21 +23,13 @@
 \usepackage{hyperref}
 \bibliography{bibfile}
 
-\pgfplotsset{width=\textwidth,compat=1.14}\usepgfplotslibrary{statistics}
-
-%\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
-\makeatletter
-\pgfplotsset{
-	boxplot/.cd,
-	every median/.style={red}
-}
+\pgfplotsset{width=\columnwidth,compat=1.14}\usepgfplotslibrary{statistics}
+\pgfplotsset{boxplot/.cd,every median/.style={red}}
 \pgfplotsset{grid style={help lines}}
 \pgfplotsset{minor grid style={very thin, dotted}}
 \pgfplotsset{major grid style={thick}}
-\makeatother
 
+\newcommand{\unsim}{\mathord{\sim}}
 \begin{document}
 
 \title{Cleaning and Visualizing a dirty set of restaurant data}
@@ -53,15 +45,15 @@ florian.loher@st.oth-regensburg.de}
 \maketitle
 
 \begin{abstract}
-This document shows a possible approach to cleaning and visualizing the dirty dataset provided at \url{https://hpi.de/naumann/projects/repeatability/datasets/restaurants-dataset.html}. It describes how the data is first audited, then cleaned in MongoDB, removing duplicates, using a common search engine to find correct restaurant names and standardizing road and city names. Lastly the data is visualized by generating a website that contains an OSM map and markers indicating the location of each restaurant.
+Duplicate detection is an important part of data cleaning. Many approaches use string matching as a means to calculate the similarity of records. In this article I elaborate on the use of semi-random training sets combined with the SoftTF-IDF similarity measure, reaching precision and recall values over 85\% for relatively small training sets.
 \end{abstract}
 
 \begin{IEEEkeywords}
-MongoDB, Data cleaning
+Data cleaning, duplicate detection
 \end{IEEEkeywords}
 
 \section{Introduction}
-Big data is a rapidly growing field of research that already gained overwhelming interest in the general public. The amount of data is increasing at an exponential rate an is likely to grow further at this rate. To be able to leverage the power of data, the need for ways to clean is as high as ever.
+Big data is a rapidly growing field of research that already gained overwhelming interest in the general public. The amount of data is increasing at an exponential rate and is likely to grow further at this rate. To be able to leverage the power of data, the need for ways to clean it is as high as ever.
 
 Data cleaning, also referred to as data scrubbing or data cleansing, is a research field concerned with improving the quality of faulty data. Typical aspects that are sought to be improved are the amount of duplicates, type errors or inconsistencies\cite{Bilenko.2003}.
 
@@ -69,58 +61,54 @@ In this article I am going to outline a possible approach to detecting duplicate
 restaurants\footnote{Restaurant data provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants.tsv}}.
 I first audit the data. Then  I generate a training set, standardize fields and choose \emph{SoftTF-IDF} string matching measure with \emph{Jaro-Distance} as sub measure as the algorithm for duplicate detection. After creating a gold standard for the training set I train the thresholds for restaurant name, phone number and address similarity that determine if two records will be declared duplicates. Lastly the detection algorithm is run on the test data and compared to the gold 
 standard\footnote{Gold standard provided at \url{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/projekte/repeatability/Restaurants/restaurants_DPL.tsv}}.
-Using and comparing different sizes of training data I show that even with a training set $10\%$  the size of the test data (86 records, 22 of which are part of duplicates) a recall of $\approx86\%$ with a precision of $\approx95\%$ is typically achieved.
+Using and comparing different sizes of training data I show that even with a training set $10\%$ the size of the test data (86 records, 22 of which are part of duplicates) a recall of $\unsim86\%$ with a precision of $\unsim95\%$ is typically achieved.
 
-\subsection{Related work}
-\textcite{Vogel.2014} describe the limitations of the restaurant data set and its gold standard for comparisons of certain duplicate detection algorithms.
-\textcite{Bilenko.2003b} use the data of restaurants to evaluate the performance of their proposed two-level learning algorithm for duplicate detection, \emph{MARLIN} (Multiply Adaptive Record Linkage with INduction).
-
-\subsection{Outline}
-In section \ref{basics} I am going to introduce basic terminology concerning data cleaning and describe the string-matching algorithms I use. Section 
+In section \ref{basics} I am going to introduce basic terminology concerning duplicate detection and describe the string-matching algorithms I use. Section \ref{prep} will cover the procedure of processing and standardizing the data to enhance the results of duplicate detection. The reasoning behind the manner of training data generation is explained in section \ref{train_gen}. Then in section \ref{matching} I will reason for the use of the string-matching algorithm SoftTF-IDF. Section \ref{training} describes the methodology of training and testing followed by the presentation and comparison of my results in section \ref{comparison}. Finally I will draw conclusions in section \ref{conclusions} and give an outlook to possible future research as well as point to some related work.
 %% Outline
-\section{Duplicate detection}\label{basics}
-A major field of research is duplicate detection i.e.\ trying to find methods that recognize if two distinct records in a given data set actually represent the same real world entity. Such pairs of records are called duplicates. The degree to which an algorithm, method or process is able to detect duplicates can be measured if a gold standard addressing the relevant data set is available. A gold standard is a complete list of every duplicate that exists in the data and therefore also a complete list of all non duplicates.
-The way of comparing the algorithm to the gold standard is by calculating its precision and recall. Precision is defined as $\frac{|TP|}{|TP|+|FP|}$ where $|TP|$ is the number of records both the algorithm and the gold standard recognize as duplicates (true positives) and $|FP|$ is the number of records the algorithm recognizes as duplicates but the gold standard does not (false positives). Recall is defined as $\frac{|TP|}{|TP|+|FN|}$ where $|TP|$ is the same as before and $|FN|$ is the number of true duplicates the algorithm does not find.
+\section{Basics of duplicate detection}\label{basics}
+A major field of research is duplicate detection i.e.\ trying to find methods that recognize if two distinct records in a given data set actually represent the same real world entity. Such pairs of records are called duplicates.
+
+The degree to which an algorithm, method or process is able to detect duplicates can be measured if a gold standard addressing the relevant data set is available. A gold standard is a complete list of every duplicate that exists in the data.
+
+The way of comparing the algorithm to the gold standard is to calculate its precision and recall. Precision is defined as $\frac{|TP|}{|TP|+|FP|}$ where $|TP|$ is the number of records both the algorithm and the gold standard recognize as duplicates (true positives) and $|FP|$ is the number of records the algorithm recognizes as duplicates but the gold standard does not (false positives). Recall is defined as $\frac{|TP|}{|TP|+|FN|}$ where $|TP|$ is the same as before and $|FN|$ is the number of true duplicates the algorithm does not find (false negatives).
 
 \subsection{String matching}
 Duplicate detection relies on the matching of strings i.e.\ comparing fields of distinct records in a given dataset and calculating how similar they are, based on a chosen measure.
 
 Token-based measures are typically optimized to handle differences where substrings are swapped or rotated. Frequent differences between fields that represent the same entity are for example swapping first and last name, or having a title prepended or put at the end. By splitting the strings into tokens and comparing the resulting sets of strings these rotations cease to impact those measures.
 
-WHIRL, a token-based similarity measure proposed by \cite{Cohen.1998} additionally utilizes the \emph{TF-IDF} (term frequency, indirect document frequency) weighing scheme. This also prioritizes terms that appear rarely in the document giving credit to the thought that strings are probably semantically equivalent if they share a lot of defining terms whereas frequent terms, such as \emph{street} in a field that represents an address, are less likely to point to duplicates.
+WHIRL, a token-based similarity measure proposed by \cite{Cohen.1998} additionally utilizes the \emph{TF-IDF} (term frequency, indirect document frequency) weighing scheme. This also prioritizes terms that appear rarely in the document giving credit to the thought that strings are probably semantically equivalent if they share a lot of defining terms. Frequent terms, such as \emph{street} in a field that represents an address, however are less likely to point to duplicates and should be valued less.
 
-A further subtlety is introduced by \cite{Bilenko.2003} with the measure \emph{SoftTF-IDF}. Instead of needing exact matches for the tokens like WHIRL, SoftTF-IDF utilizes a character-based similarity measure to calculate similiarity values for tokens that are not exact matches.
+A further subtlety is introduced by \cite{Bilenko.2003} with the measure \emph{SoftTF-IDF}. Instead of needing exact matches for the tokens like WHIRL, SoftTF-IDF utilizes a character-based similarity measure to calculate similarity values for tokens that are not exact matches.
 
-Character-based similarity measures often handle typing errors very well and are typically optimized for specific types of strings such as names. 
-\subsection{Matching algorithms for names and addresses}
+Character-based similarity measures often handle typing errors very well and are typically optimized for specific types of strings such as names. The \emph{Jaro-Distance} metric introduced by \autocite{Jaro.1978} that is intended for first and last names. It tries to match strings by finding common characters and calculating the number of transpositions by counting the number of non-matching common characters at equal positions.
 
 \section{Auditing and data preparation}\label{prep}
 Before trying to find duplicate data in any given dataset most data cleaning approaches start with a phase of preparing the data. Data preparation usually contains the steps parsing, transformation and standardization. This includes but is by far not limited to discovering which types of fields are present in the data and removing unnecessary characters from fields. 
 
-In the case of the restaurants data I am looking at a quick audit reveals that entries in the \enquote{phone} fields do not conform to a common format. The phone field of record 97 is \emph{212/627-8273} while record 98 contains the value \emph{212-627-8273}. The separation characters between numbers are not uniform. This can be observed throughout the entirety of the data set. A non extensive record of further inconsistencies can be found in table \ref{rec_faults}. 
+In the case of the restaurants data I am looking at, a quick audit reveals that entries in the \enquote{phone} fields do not conform to a common format. The phone field of record~97 is \emph{212/627-8273} while record~98 contains the value \emph{212-627-8273}. The separation characters between numbers are not uniform. This can be observed throughout the entirety of the data set. A non extensive record of further inconsistencies can be found in table \ref{rec_faults}. 
 
 In the parsing and transformation phase I copy the data to an instance of \emph{MongoDB}\footnote{MongoDB is a document database. For more information visit \url{https://www.mongodb.com/}} in order to make the data easier accessible in the following stages. Each row of the original data is transformed into a record in the database. In MongoDB the equivalent to tables of relational databases are collections. Each step of my data cleaning process creates a new collection with the updated data.
 
 The process of standardization is split up, targeting each field of the records separately. Because of that the order in which the fields are standardized is irrelevant to the resulting data.
 
 Each field is standardized by the use of different regular expressions that are suited to find the irregularities in the field. Furthermore replacements are done using dictionaries of standardized values. For example the address field contains street types which are sometimes abbreviated. One regular expression is used to find all abbreviations in a field and a dictionary containing street types and their common abbreviations enables the replacement of each instance by its non abbreviated form.
-
 \begin{table}
 	\begin{tabularx}{\columnwidth}{lr@{ }XX}
 	\toprule
 	field &&type of inconsistency & example \\
 	\midrule
-	city & --&irregular use of abbreviations & sometimes \emph{la} instead of \emph{los angeles}\\
-		 & --& use of city district name as city name& \emph{hollywood} instead of \emph{los angeles}\\
+	city & --&Irregular use of abbreviations &Sometimes \emph{la} instead of \emph{los angeles}\\\rule[.2ex]{0pt}{2.5ex}
+		 & --&Use of city district name as city name& \emph{hollywood} instead of \emph{los angeles}\\
 	\midrule
-	type & --& irregular use of abbreviations  & sometimes \emph{bbq} instead of \emph{barbecue}\\
-		 & --& use of different separators for types & \emph{greek and middle eastern} and \emph{russian/german})\\
+	type & --& Irregular use of abbreviations  &Sometimes \emph{bbq} instead of \emph{barbecue}\\\rule[.2ex]{0pt}{2.5ex}
+		 & --& Use of different separators for types & \emph{greek and middle eastern} and \emph{russian/german})\\
 	\midrule
-	address & --&irregular use of abbreviations & sometimes \emph{blvd} instead of \emph{boulevard}, sometimes \emph{ninth} instead of \emph{9th}\\
-	 & --& presence of directions & \emph{60 w. 55th st. between 5th and 6th ave.}\\
-	 & --& irregular choice of abbreviations & \emph{blvd} or \emph{blv}\\
+	address & --&Irregular use of abbreviations &Sometimes \emph{blvd} instead of \emph{boulevard}, sometimes \emph{ninth} instead of \emph{9th}\\\rule[.2ex]{0pt}{2.5ex}
+	 & --&Presence of directions & \emph{60 w. 55th st. between 5th and 6th ave.}\\\rule[.2ex]{0pt}{2.5ex}
+	 & --& Irregular choice of abbreviations & \emph{blvd} or \emph{blv}\\
 	\midrule
-	phone & --& irregular use of separation characters  & sometimes \emph{212/627-8273} instead of \emph{212-627-8273}\\
+	phone & --& Irregular use of separation characters  & Sometimes \emph{212/627-8273} instead of \emph{212-627-8273}\\
 	\bottomrule
 	\end{tabularx}
 	\caption{Types of inconsistencies present in restaurant data}\label{rec_faults}
@@ -129,29 +117,84 @@ Each field is standardized by the use of different regular expressions that are 
 \section{Generation of training data}\label{train_gen}
 Since similarity measures typically return a value between 0 and 1 thresholds must be set for which two records are considered semantically equivalent. One way of finding such thresholds is to set them according to prior experience. A similar approach is the use of training data. In this case I am using a subsets of the original data of different sizes. In section \ref{comparison} I will compare the effect the size of the training data has in regards to precision and recall. 
 
-The subsets are chosen randomly with the restriction of including duplicates at the same ratio as in the complete data set. This is necessary as random pairs of records are very unlikely to be duplicates. Considering for example a set of $100$ records containing $50$ pairs of duplicates. Regardless which records are chosen both of them are going to be part of a duplicate pair. The probability that both records are part of the same duplicate pair is $P(x \in D) \cdot P(y \equiv x) = 1 \cdot \frac{1}{99} \approx 1,01\%$, where $P(x \in D)$ it the probability that a randomly chosen record $x$ is part of a duplicate and $P(y \equiv x)$ is the probability that the two randomly chosen records $x,y$ are part of the same duplicate. This calculation shows that a completely random subset is likely to contain a duplicate ration that is considerably lower than the original data. However it is exactly those duplicates that greatly contribute to the value of the ratio.
+The subsets are chosen randomly with the restriction of including duplicates at the same ratio as in the complete data set. This is necessary as random pairs of records are very unlikely to be duplicates. Consider for example a set of $100$ records containing $50$ pairs of duplicates. Regardless which records are chosen both of them are going to be part of a duplicate pair. The probability that both records are part of the same duplicate pair is $P(x \in D) \cdot P(y \equiv x) = 1 \cdot \frac{1}{99} \approx 1,01\%$, where $P(x \in D)$ it the probability that a randomly chosen record $x$ is part of a duplicate and $P(y \equiv x)$ is the probability that the two randomly chosen records $x,y$ are part of the same duplicate. This calculation shows that a completely random subset is likely to contain a duplicate ration that is considerably lower than the original data. However it is exactly those duplicates that greatly contribute to the value of the ratio.
 Therefore it is necessary to include at least some duplicates in the training set deliberately.
 
 Although finding all duplicates in a data set is very difficult and most often requires a lot of manual work, finding a small subset of duplicates is comparatively easy since not all pairs of records need to be considered. One way of finding duplicates may be sorting the records and comparing adjacent records. This process is deliberately left out in this work. Instead the provided gold standard is utilized to ensure the same ratio of duplicates in the training set as in the original data.
+
+
 \section{Choice of string-matching algorithm SoftTF-IDF}\label{matching}
-As described in section \ref{basics} different measures exist for calculating the similarity between fields of records. In order to mitigate the effect of swapped elements in the string a token-based measure is advantageous. The TF-IDF measure also prioritizes terms that appear rarely in the document giving credit to the thought that strings are probably semantically equivalent if they share a lot of defining terms whereas frequent terms, such as \emph{street} in a field that represents an address, are less likely to point to duplicates\cite{Cohen.1998}.
+As described in section \ref{basics} different measures exist for calculating the similarity between fields of records. In order to mitigate the effect of swapped elements in the string a token-based measure is advantageous.
+Since streets and names often contain substrings that do not majorly impact the similarity of two records, like \emph{street} or \emph{restaurant} the use of a similarity measure that utilizes an approach including the TD-IDF weighing scheme seems appropriate.
 
-Furthermore to decrease the risk of terms not matching because of typing errors or irregular elements that were not targeted by the standardization process the comparison between terms is itself done by a similarity measure, the JaroDistance in this case. The resulting SoftTF-IDF measure is implemented by the python library \emph{py\_stringmatching}\footnote{More information on py\_stringmatching  can be found at \url{https://sites.google.com/site/anhaidgroup/projects/magellan/py\_stringmatching}}
+To further decrease the risk of terms not matching because of typing errors or irregular elements that were not targeted by the standardization process the comparison between terms should itself be done by a similarity measure. Therefore I propose the use of SoftTF-IDF. Since the tokens themselves usually do not tend to be long, a similarity measure that optimizes for short strings, such as the Jaro-Distance, is appropriate for token matching.
 
-\section{Training with training data}\label{training}
+The used SoftTF-IDF measure is implemented by the python library \emph{py\_stringmatching}\footnote{More information on py\_stringmatching  can be found at \url{https://sites.google.com/site/anhaidgroup/projects/magellan/py\_stringmatching}}.
 
-\section{Detection of duplicates in restaurant data}\label{duplicate_detection}
+\section{Training and Testing}\label{training}
+Training is done by first calculating similarities for a small subset of all possible pairs of records. First all fields of records are tokenized with an alphanumeric tokenizer, meaning all non alphanumeric characters are interpreted ad separation characters for tokens. These tokens are sorted alphabetically, for the name and address fields. The phone tokens are left as they are. Now the concatenation of tokens is used to sort the records once for each of the aforementioned fields. In every sort iteration each record is compared to its 4 immediate successors using the SoftTF-IDF algorithm described in section \ref{matching}. The similarity values for each compared pair are stored in a dictionary.
 
-\section{Comparison of different sizes of training data}\label{comparison}
+After calculation of the similarity values precision and recall are calculated for all possible combinations of thresholds for phone, name and address similarity. The thresholds are limited to $10\%$ intervals meaning they can only take on one of the values $0, 0.1, 0.2, \dots, 1$.
+The combination of thresholds that results in the maximum value for $precision \cdot recall$ is considered optimal and therefore chosen as the one that is used for the test data.
 
-\section{Conclusions}
+For testing all records of the restaurant data go through the same steps as the test data: tokenization, sorting of tokens, sorting of records, calculation of similarity according to SoftTF-IDF. Of course the step of iterating through different thresholds is omitted. Instead the combination resulting from training is applied. 
 
-\input{recall_figure}
-\input{precision_figure}
+The steps of training were done for training data sizes of $ 10\% - 100\%$ of the restaurant data. The ratios of duplicates were deliberately chosen to be as equal to the original ratio in the data set as possible but to never exceed it. A reference of the exact sizes is provided in appendix \ref{tableappendix} table \ref{ratios}. To calculate average precision and recall values for each instance of training set size all instances of training were run $315$ times.
+
+
+\section{Results and comparison of different sizes of training data}\label{comparison}
+Figures \ref{precision}, \ref{recall} and \ref{thresholds} show the results of my testing. They describe the average precision and recall of the training and test sets depending on the training set sizes and the average optimal thresholds for the phone, name and address fields that are used to determine if two values are regarded as duplicates.
+The results present some interesting findings.
+\input{precision1}
+\input{recall1}
+
+First of all it is noteworthy that even the training sets containing only $86$ ($\unsim10\%$ of restaurant data) records result in an average recall of $\unsim0.868$ with a standard deviation $\sigma\sim0.073$ combined with an average precision of $\unsim0.942$ with $\sigma\sim0.061$. While recall increases about $10\%$ to $\unsim0.964$ at $100\%$, half of this improvement is reached by merely increasing the training set size to $20\%$.
+
+Precision on the other hand increases only slightly to $\unsim0.947$ resulting in a total difference of only  $\unsim0.005$. This could be due to the fact that the precision is already pretty high from the beginning being over $90\%$. What is more interesting though is that in contrast to test data precision the precision in training is first falling drastically from $\unsim0.960$ at $10\%$ to a minimum average of $\unsim0.817$ at $60\%$ before rising again to $0.947$ at $100\%$. Investigating this unintuitive behaviour in future work could lead to a better understanding of the correlation between precision in training and test data an enable better predictions of likely precision values given a training precision.
+
+Further figures depicting precision and recall in more detail can be found in appendix \ref{figureappendix}.
+
 \input{thresholds_figure}
+
+The optimal thresholds shown in figure \ref{thresholds} present some interesting questions as well. While initially decreasing from $\unsim0.652$ at $10\%$ to $\unsim0.506$ at $50\%$ the threshold of the phone field finally increases to $1.000$ at $100\%$ whereas name and address both decrease rather steadily from $\unsim0.385$ to $\unsim0.100$ (name) and from  $\unsim0.351$ to $0.000$ (address) respectively. The former indicates that the phone field seems to be a good indicator for duplicates if it is used very rigorously. This conforms to the data since most phone numbers of duplicates are identical with only a few outliers. The initial bump however does not lend itself to any immediate conclusions.
+
+The address threshold quickly descending to values near 0 might be an indicator that the chosen similarity measure might not be suitable for address date because intuitively addresses should be a good discriminator for duplicates. An alternative conclusion would be that the threshold of phone entries already encapsulates most of the information that is produced by the address threshold leaving a high address threshold only to declare actual duplicates as non duplicates, which in turn decreases both precision and recall.
+
+
+\section{Conclusions, outlook and related work}\label{conclusions}
+In this article I showed a possible approach to duplicate detection using the token-based similarity measure SoftTF-IDF and comparing the use of different sized training sets to calculate similarity thresholds. Even small training sets are able to yield presentable results, especially considering the small size of the original data set. \textcite{Vogel.2014} describe this as one limitation in the restaurant data set and its gold standard for comparisons regarding certain duplicate detection algorithms. The question if training sets of the same absolute size result in similar precision and recall for larger test data needs further investigation.
+
+Additional research into the causes of the initial bump in phone threshold as well as reasons to why the threshold for the address field diminishes so quickly might prove to reveal further insights. \textcite{Bilenko.2003b} give a lead to the latter question in proposing that TF-IDF is probably not well suited for detecting duplicates in addresses because of its lack of ability to give different weights to terms that appear similarly often but differ greatly in semantic importance e.g.\ \emph{34th} a certain street and \emph{place} a simple street suffix. They use the data of restaurants to evaluate the performance of their proposed two-level learning algorithm for duplicate detection, \emph{MARLIN} (Multiply Adaptive Record Linkage with INduction).
+
+
+
 
 
 
 \printbibliography
 
+\appendices
+	\section{Tables}\label{tableappendix}
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{lrrrrr}
+	training size relative ($\%$)	  &  10&  20&  30&  40&  50\\
+	\midrule                                                     
+	training size absolute 			  &  86& 172& 259& 345& 432\\
+	number of duplicates	  		  &  11&  22&  33&  44&  56\\                                                   
+	ratio of duplicates ($\%$)        &12,8&12,8&12,7&12,8&13,0\\
+	\\\\
+	training size relative ($\%$)	  &  60&  70&  80&  90& 100\\
+	\midrule
+	training size absolute 			  & 518& 604& 691& 777& 864\\
+	number of duplicates	  		  &  67&  78&  89& 100& 112\\
+	ratio of duplicates ($\%$)        &12,9&12,9&12,9&12,9&13,0\\
+	\end{tabular}
+	\caption{Data sizes and ratios in training sets}\label{ratios}
+	\end{table}
+	
+	\section{Boxplots of precision and recall for training and test data}\label{figureappendix}
+	\input{recall_figure}
+	\newpage \null\newpage
+	\input{precision_figure}
 \end{document}

@@ -60,7 +60,7 @@ def train(gold_standard_file, collection_lane):
 
         print(i)
     t1 = list(train_temp)
-    best = sorted(t1, reverse=True)[0]
+    best = max(t1)
     training_result = train_temp[best]
     return training_result
 
@@ -74,8 +74,9 @@ def test(gold_standard_file, collection_lane, tr_result, verbose):
     precision = len(intersect) / len(found_duplicates)
     recall = len(intersect) / len(real_duplicates)
     if verbose:
-        print("pht, nmt, adt, trpre, trrec, tepre, terec")
-        print("{:3.1f}, {:3.1f}, {:3.1f}, {:5.3f}, {:5.3f}, {:5.3f}, {:5.3f}\n".format(tr_result[0],
+        print("phone    |name     |address  |training |training|test     |test  ")
+        print("threshold|threshold|threshold|precision|recall  |precision|recall")
+        print("{:9.1f}|{:9.1f}|{:9.1f}|{:9.3f}|{:8.3f}|{:9.3f}|{:6.3f}\n".format(tr_result[0],
                                                                                        tr_result[1],
                                                                                        tr_result[2],
                                                                                        tr_result[3],

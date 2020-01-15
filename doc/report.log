@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.5.16)  13 JAN 2020 13:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.5.16)  15 JAN 2020 00:22
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -336,13 +336,13 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 \ALC@tlm=\skip48
 \algorithmicindent=\skip49
 )
-(c:/texlive/2018/texmf-dist/tex/latex/enumitem/enumitem.sty
-Package: enumitem 2011/09/28 v3.5.2 Customized lists
-\labelindent=\skip50
-\enit@outerparindent=\dimen150
-\enit@toks=\toks25
-\enit@inbox=\box30
-\enitdp@description=\count126
+(c:/texlive/2018/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count126
+\float@exts=\toks25
+\float@box=\box30
+\@float@everytoks=\toks26
+\@floatcapt=\box31
 )
 (c:/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
@@ -361,8 +361,8 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 (c:/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen151
-\Gin@req@width=\dimen152
+\Gin@req@height=\dimen150
+\Gin@req@width=\dimen151
 )
 (c:/texlive/2018/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2017/04/05 v2.0i Standard LaTeX package
@@ -633,14 +633,14 @@ Package: xstring 2013/10/13  v1.7c  String manipulations (C Tellechea)
 \blx@parenlevel@text=\count165
 \blx@parenlevel@foot=\count166
 \blx@sectionciteorder@0=\count167
-\labelnumberwidth=\skip51
-\labelalphawidth=\skip52
-\biblabelsep=\skip53
-\bibitemsep=\skip54
-\bibnamesep=\skip55
-\bibinitsep=\skip56
-\bibparsep=\skip57
-\bibhang=\skip58
+\labelnumberwidth=\skip50
+\labelalphawidth=\skip51
+\biblabelsep=\skip52
+\bibitemsep=\skip53
+\bibnamesep=\skip54
+\bibinitsep=\skip55
+\bibparsep=\skip56
+\bibhang=\skip57
 \blx@bcfin=\read1
 \blx@bcfout=\write4
 \c@mincomprange=\count168
@@ -724,20 +724,20 @@ Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \c@savedoriglanguage=\count302
 \c@pageref=\count303
 \c@savedpageref=\count304
-\shorthandwidth=\skip59
-\shortjournalwidth=\skip60
-\shortserieswidth=\skip61
-\shorttitlewidth=\skip62
-\shortauthorwidth=\skip63
-\shorteditorwidth=\skip64
-\locallabelnumberwidth=\skip65
-\locallabelalphawidth=\skip66
-\localshorthandwidth=\skip67
-\localshortjournalwidth=\skip68
-\localshortserieswidth=\skip69
-\localshorttitlewidth=\skip70
-\localshortauthorwidth=\skip71
-\localshorteditorwidth=\skip72
+\shorthandwidth=\skip58
+\shortjournalwidth=\skip59
+\shortserieswidth=\skip60
+\shorttitlewidth=\skip61
+\shortauthorwidth=\skip62
+\shorteditorwidth=\skip63
+\locallabelnumberwidth=\skip64
+\locallabelalphawidth=\skip65
+\localshorthandwidth=\skip66
+\localshortjournalwidth=\skip67
+\localshortserieswidth=\skip68
+\localshorttitlewidth=\skip69
+\localshortauthorwidth=\skip70
+\localshorteditorwidth=\skip71
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 
@@ -821,13 +821,13 @@ Package: pgfplots 2018/03/28 v1.16 Data Visualization (1.16)
 (c:/texlive/2018/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 (c:/texlive/2018/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
-\pgfutil@everybye=\toks26
-\pgfutil@tempdima=\dimen153
-\pgfutil@tempdimb=\dimen154
+\pgfutil@everybye=\toks27
+\pgfutil@tempdima=\dimen152
+\pgfutil@tempdimb=\dimen153
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.tex)
 ) (c:/texlive/2018/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
-\pgfutil@abb=\box31
+\pgfutil@abb=\box32
 
 (c:/texlive/2018/texmf-dist/tex/latex/ms/everyshi.sty
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
@@ -843,29 +843,29 @@ Package: pgf 2015/08/07 v3.0.1a (rcs-revision 1.15)
 Package: pgfsys 2014/07/09 v3.0.1a (rcs-revision 1.48)
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks27
-\pgfkeys@temptoks=\toks28
+\pgfkeys@pathtoks=\toks28
+\pgfkeys@temptoks=\toks29
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
-\pgfkeys@tmptoks=\toks29
+\pgfkeys@tmptoks=\toks30
 ))
-\pgf@x=\dimen155
-\pgf@y=\dimen156
-\pgf@xa=\dimen157
-\pgf@ya=\dimen158
-\pgf@xb=\dimen159
-\pgf@yb=\dimen160
-\pgf@xc=\dimen161
-\pgf@yc=\dimen162
+\pgf@x=\dimen154
+\pgf@y=\dimen155
+\pgf@xa=\dimen156
+\pgf@ya=\dimen157
+\pgf@xb=\dimen158
+\pgf@yb=\dimen159
+\pgf@xc=\dimen160
+\pgf@yc=\dimen161
 \w@pgf@writea=\write5
 \r@pgf@reada=\read2
 \c@pgf@counta=\count316
 \c@pgf@countb=\count317
 \c@pgf@countc=\count318
 \c@pgf@countd=\count319
-\t@pgf@toka=\toks30
-\t@pgf@tokb=\toks31
-\t@pgf@tokc=\toks32
+\t@pgf@toka=\toks31
+\t@pgf@tokb=\toks32
+\t@pgf@tokc=\toks33
  (c:/texlive/2018/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
 )
@@ -891,12 +891,12 @@ Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen163
+\pgfmath@dimen=\dimen162
 \pgfmath@count=\count322
-\pgfmath@box=\box32
-\pgfmath@toks=\toks33
-\pgfmath@stack@operand=\toks34
-\pgfmath@stack@operation=\toks35
+\pgfmath@box=\box33
+\pgfmath@toks=\toks34
+\pgfmath@stack@operand=\toks35
+\pgfmath@stack@operation=\toks36
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.te
@@ -920,51 +920,51 @@ etics.code.tex)))
 ))
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
-\pgf@picminx=\dimen164
-\pgf@picmaxx=\dimen165
-\pgf@picminy=\dimen166
-\pgf@picmaxy=\dimen167
-\pgf@pathminx=\dimen168
-\pgf@pathmaxx=\dimen169
-\pgf@pathminy=\dimen170
-\pgf@pathmaxy=\dimen171
-\pgf@xx=\dimen172
-\pgf@xy=\dimen173
-\pgf@yx=\dimen174
-\pgf@yy=\dimen175
-\pgf@zx=\dimen176
-\pgf@zy=\dimen177
+\pgf@picminx=\dimen163
+\pgf@picmaxx=\dimen164
+\pgf@picminy=\dimen165
+\pgf@picmaxy=\dimen166
+\pgf@pathminx=\dimen167
+\pgf@pathmaxx=\dimen168
+\pgf@pathminy=\dimen169
+\pgf@pathmaxy=\dimen170
+\pgf@xx=\dimen171
+\pgf@xy=\dimen172
+\pgf@yx=\dimen173
+\pgf@yy=\dimen174
+\pgf@zx=\dimen175
+\pgf@zy=\dimen176
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.cod
 e.tex
 File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
-\pgf@path@lastx=\dimen178
-\pgf@path@lasty=\dimen179
+\pgf@path@lastx=\dimen177
+\pgf@path@lasty=\dimen178
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.te
 x
 File: pgfcorepathusage.code.tex 2014/11/02  (rcs-revision 1.24)
-\pgf@shorten@end@additional=\dimen180
-\pgf@shorten@start@additional=\dimen181
+\pgf@shorten@end@additional=\dimen179
+\pgf@shorten@start@additional=\dimen180
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
 File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
-\pgfpic=\box33
-\pgf@hbox=\box34
-\pgf@layerbox@main=\box35
+\pgfpic=\box34
+\pgf@hbox=\box35
+\pgf@layerbox@main=\box36
 \pgf@picture@serial@count=\count324
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code
 .tex
 File: pgfcoregraphicstate.code.tex 2014/11/02  (rcs-revision 1.12)
-\pgflinewidth=\dimen182
+\pgflinewidth=\dimen181
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.c
 ode.tex
 File: pgfcoretransformations.code.tex 2015/08/07  (rcs-revision 1.20)
-\pgf@pt@x=\dimen183
-\pgf@pt@y=\dimen184
-\pgf@pt@temp=\dimen185
+\pgf@pt@x=\dimen182
+\pgf@pt@y=\dimen183
+\pgf@pt@temp=\dimen184
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
@@ -978,11 +978,11 @@ File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
 File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
-\pgfarrowsep=\dimen186
+\pgfarrowsep=\dimen185
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
-\pgf@max=\dimen187
+\pgf@max=\dimen186
 \pgf@sys@shading@range@num=\count325
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
@@ -990,7 +990,7 @@ File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
 File: pgfcoreexternal.code.tex 2014/07/09  (rcs-revision 1.21)
-\pgfexternal@startupbox=\box36
+\pgfexternal@startupbox=\box37
 ))
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
 File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
@@ -1004,7 +1004,7 @@ File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
 )))
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2014/03/21  (rcs-revision 1.35)
-\pgfnodeparttextbox=\box37
+\pgfnodeparttextbox=\box38
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
 File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
@@ -1012,8 +1012,8 @@ File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
 (c:/texlive/2018/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.st
 y
 Package: pgfcomp-version-0-65 2007/07/03 v3.0.1a (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen188
-\pgf@nodesepend=\dimen189
+\pgf@nodesepstart=\dimen187
+\pgf@nodesepend=\dimen188
 )
 (c:/texlive/2018/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.st
 y
@@ -1027,10 +1027,10 @@ Package: pgfcomp-version-1-18 2007/07/23 v3.0.1a (rcs-revision 1.1)
 Package: pgffor 2013/12/13 v3.0.1a (rcs-revision 1.25)
 
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
-\pgffor@iter=\dimen190
-\pgffor@skip=\dimen191
-\pgffor@stack=\toks36
-\pgffor@toks=\toks37
+\pgffor@iter=\dimen189
+\pgffor@skip=\dimen190
+\pgffor@stack=\toks37
+\pgffor@toks=\toks38
 ))
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
@@ -1039,18 +1039,18 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 de.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
 \pgf@plot@mark@count=\count326
-\pgfplotmarksize=\dimen192
+\pgfplotmarksize=\dimen191
 )
-\tikz@lastx=\dimen193
-\tikz@lasty=\dimen194
-\tikz@lastxsaved=\dimen195
-\tikz@lastysaved=\dimen196
-\tikzleveldistance=\dimen197
-\tikzsiblingdistance=\dimen198
-\tikz@figbox=\box38
-\tikz@figbox@bg=\box39
-\tikz@tempbox=\box40
-\tikz@tempbox@bg=\box41
+\tikz@lastx=\dimen192
+\tikz@lasty=\dimen193
+\tikz@lastxsaved=\dimen194
+\tikz@lastysaved=\dimen195
+\tikzleveldistance=\dimen196
+\tikzsiblingdistance=\dimen197
+\tikz@figbox=\box39
+\tikz@figbox@bg=\box40
+\tikz@tempbox=\box41
+\tikz@tempbox@bg=\box42
 \tikztreelevel=\count327
 \tikznumberofchildren=\count328
 \tikznumberofcurrentchild=\count329
@@ -1070,10 +1070,10 @@ File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1a (rcs-revision 1.2)
 )))
 (c:/texlive/2018/texmf-dist/tex/generic/pgfplots/pgfplots.code.tex
 (c:/texlive/2018/texmf-dist/tex/generic/pgfplots/pgfplotscore.code.tex
-\t@pgfplots@toka=\toks38
-\t@pgfplots@tokb=\toks39
-\t@pgfplots@tokc=\toks40
-\pgfplots@tmpa=\dimen199
+\t@pgfplots@toka=\toks39
+\t@pgfplots@tokb=\toks40
+\t@pgfplots@tokc=\toks41
+\pgfplots@tmpa=\dimen198
 \c@pgfplots@coordindex=\count335
 \c@pgfplots@scanlineindex=\count336
 
@@ -1108,7 +1108,7 @@ ode.tex)
 (c:/texlive/2018/texmf-dist/tex/generic/pgfplots/numtable/pgfplotstableshared.c
 ode.tex
 \c@pgfplotstable@counta=\count339
-\t@pgfplotstable@a=\toks41
+\t@pgfplotstable@a=\toks42
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsdeque.co
 de.tex)
@@ -1142,16 +1142,16 @@ ex)
 brarydecorations.code.tex
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.t
 ex
-\pgfdecoratedcompleteddistance=\dimen256
-\pgfdecoratedremainingdistance=\dimen257
-\pgfdecoratedinputsegmentcompleteddistance=\dimen258
-\pgfdecoratedinputsegmentremainingdistance=\dimen259
-\pgf@decorate@distancetomove=\dimen260
+\pgfdecoratedcompleteddistance=\dimen199
+\pgfdecoratedremainingdistance=\dimen256
+\pgfdecoratedinputsegmentcompleteddistance=\dimen257
+\pgfdecoratedinputsegmentremainingdistance=\dimen258
+\pgf@decorate@distancetomove=\dimen259
 \pgf@decorate@repeatstate=\count341
-\pgfdecorationsegmentamplitude=\dimen261
-\pgfdecorationsegmentlength=\dimen262
+\pgfdecorationsegmentamplitude=\dimen260
+\pgfdecorationsegmentlength=\dimen261
 )
-\tikz@lib@dec@box=\box42
+\tikz@lib@dec@box=\box43
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
 brarydecorations.pathmorphing.code.tex
@@ -1162,12 +1162,12 @@ brarydecorations.pathreplacing.code.tex
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydec
 orations.pathreplacing.code.tex))
 \pgfplots@numplots=\count342
-\pgfplots@xmin@reg=\dimen263
-\pgfplots@xmax@reg=\dimen264
-\pgfplots@ymin@reg=\dimen265
-\pgfplots@ymax@reg=\dimen266
-\pgfplots@zmin@reg=\dimen267
-\pgfplots@zmax@reg=\dimen268
+\pgfplots@xmin@reg=\dimen262
+\pgfplots@xmax@reg=\dimen263
+\pgfplots@ymin@reg=\dimen264
+\pgfplots@ymax@reg=\dimen265
+\pgfplots@zmin@reg=\dimen266
+\pgfplots@zmax@reg=\dimen267
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
 braryplotmarks.code.tex
@@ -1185,13 +1185,13 @@ Package: caption 2017/03/19 v3.3-145 Customizing captions (AR)
 (c:/texlive/2018/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2018/04/15 v1.7-167 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
-\captionmargin=\dimen269
-\captionmargin@=\dimen270
-\captionwidth=\dimen271
-\caption@tempdima=\dimen272
-\caption@indent=\dimen273
-\caption@parindent=\dimen274
-\caption@hangindent=\dimen275
+\captionmargin=\dimen268
+\captionmargin@=\dimen269
+\captionwidth=\dimen270
+\caption@tempdima=\dimen271
+\caption@indent=\dimen272
+\caption@parindent=\dimen273
+\caption@hangindent=\dimen274
 Package caption Info: Unknown document class (or package),
 (caption)             standard defaults will be used.
 )
@@ -1212,36 +1212,37 @@ ference \hbox to\hsize {\normalfont \footnotesize \hfil \box \@tempboxa \hfil }
 \else \hbox to\hsize {\normalfont \footnotesize \box \@tempboxa \hfil }\fi \fi 
 \fi .
 \c@ContinuedFloat=\count343
+Package caption Info: float package is loaded.
 )
 \c@subfigure=\count344
 \c@subtable=\count345
 ) (c:/texlive/2018/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
-\multirow@colwidth=\skip73
+\multirow@colwidth=\skip72
 \multirow@cntb=\count346
-\multirow@dima=\skip74
-\bigstrutjot=\dimen276
+\multirow@dima=\skip73
+\bigstrutjot=\dimen275
 )
 (c:/texlive/2018/texmf-dist/tex/latex/tools/tabularx.sty
 Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
 
 (c:/texlive/2018/texmf-dist/tex/latex/tools/array.sty
 Package: array 2018/04/30 v2.4h Tabular extension package (FMi)
-\col@sep=\dimen277
-\ar@mcellbox=\box43
-\extrarowheight=\dimen278
-\NC@list=\toks42
-\extratabsurround=\skip75
-\backup@length=\skip76
-\ar@cellbox=\box44
+\col@sep=\dimen276
+\ar@mcellbox=\box44
+\extrarowheight=\dimen277
+\NC@list=\toks43
+\extratabsurround=\skip74
+\backup@length=\skip75
+\ar@cellbox=\box45
 )
-\TX@col@width=\dimen279
-\TX@old@table=\dimen280
-\TX@old@col=\dimen281
-\TX@target=\dimen282
-\TX@delta=\dimen283
+\TX@col@width=\dimen278
+\TX@old@table=\dimen279
+\TX@old@col=\dimen280
+\TX@target=\dimen281
+\TX@delta=\dimen282
 \TX@cols=\count347
-\TX@ftn=\toks43
+\TX@ftn=\toks44
 )
 (c:/texlive/2018/texmf-dist/tex/latex/environ/environ.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
@@ -1291,7 +1292,7 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
-\@linkdim=\dimen284
+\@linkdim=\dimen283
 \Hy@linkcounter=\count348
 \Hy@pagecounter=\count349
 
@@ -1314,10 +1315,10 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4762.
 \c@Hy@tempcnt=\count351
 LaTeX Info: Redefining \url on input line 5115.
-\XeTeXLinkMargin=\dimen285
+\XeTeXLinkMargin=\dimen284
 \Fld@menulength=\count352
-\Field@Width=\dimen286
-\Fld@charsize=\dimen287
+\Field@Width=\dimen285
+\Fld@charsize=\dimen286
 Package hyperref Info: Hyper figures OFF on input line 6369.
 Package hyperref Info: Link nesting OFF on input line 6374.
 Package hyperref Info: Hyper index ON on input line 6377.
@@ -1343,7 +1344,7 @@ Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
-\Hy@SectionHShift=\skip77
+\Hy@SectionHShift=\skip76
 )
 (c:/texlive/2018/texmf-dist/tex/generic/pgfplots/libs/tikzlibrarypgfplots.stati
 stics.code.tex)
@@ -1358,33 +1359,33 @@ File: english.lbx 2018/03/04 v3.11 biblatex localization (PK/MW)
 ) (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 33.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 33.
  (c:/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 41.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 33.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 -- Lines per column: 56 (exact).
-LaTeX Info: Redefining \microtypecontext on input line 41.
+LaTeX Info: Redefining \microtypecontext on input line 33.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1401,16 +1402,16 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (c:/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count358
-\scratchdimen=\dimen288
-\scratchbox=\box45
+\scratchdimen=\dimen287
+\scratchbox=\box46
 \nofMPsegments=\count359
 \nofMParguments=\count360
-\everyMPshowfont=\toks44
+\everyMPshowfont=\toks45
 \MPscratchCnt=\count361
-\MPscratchDim=\dimen289
+\MPscratchDim=\dimen288
 \MPnumerator=\count362
 \makeMPintoPDFobject=\count363
-\everyMPtoPDFconversion=\toks45
+\everyMPtoPDFconversion=\toks46
 ) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -1437,8 +1438,8 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'report.bbl' found.
 
 (./report.bbl)
-Package biblatex Info: Reference section=0 on input line 41.
-Package biblatex Info: Reference segment=0 on input line 41.
+Package biblatex Info: Reference section=0 on input line 33.
+Package biblatex Info: Reference segment=0 on input line 33.
  ABD: EveryShipout initializing macros
 Package pgfplots notification 'compat/show suggested version=true': you might b
 enefit from \pgfplotsset{compat=1.16} (current compat level: 1.14).
@@ -1446,8 +1447,8 @@ enefit from \pgfplotsset{compat=1.16} (current compat level: 1.14).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box46
-Package hyperref Info: Link coloring OFF on input line 41.
+\AtBeginShipoutBox=\box47
+Package hyperref Info: Link coloring OFF on input line 33.
 (c:/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
@@ -1456,43 +1457,46 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count364
 )
-LaTeX Info: Redefining \ref on input line 41.
-LaTeX Info: Redefining \pageref on input line 41.
-LaTeX Info: Redefining \nameref on input line 41.
+LaTeX Info: Redefining \ref on input line 33.
+LaTeX Info: Redefining \pageref on input line 33.
+LaTeX Info: Redefining \nameref on input line 33.
 
 (./report.out) (./report.out)
 \@outlinefile=\write6
 \openout6 = `report.out'.
 
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 56.
+Package microtype Info: Character `029' is missing
+(microtype)             in font `T1/lmr/m/sc/10'.
+(microtype)             Ignoring protrusion settings for this character.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 61.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 56.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 61.
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 56.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 61.
 
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 56.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 61.
 
 
 (c:/texlive/2018/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 56.
+(Font)              <10> on input line 61.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 56.
+(Font)              <7> on input line 61.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 56.
-LaTeX Font Info:    Try loading font information for U+msa on input line 56.
+(Font)              <5> on input line 61.
+LaTeX Font Info:    Try loading font information for U+msa on input line 61.
 
 (c:/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -1500,7 +1504,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (c:/texlive/2018/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 56.
+LaTeX Font Info:    Try loading font information for U+msb on input line 61.
 
 (c:/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1508,39 +1512,24 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (c:/texlive/2018/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-Underfull \hbox (badness 10000) in paragraph at lines 55--57
-\T1/lmr/bx/n/9 at []$https : / / hpi . de / naumann / projects / repeatability 
-/
- []
-
-
-Underfull \hbox (badness 1824) in paragraph at lines 55--57
-\T1/lmr/bx/n/9 datasets / restaurants-[]dataset . html$[]. It de-scribes how
- []
-
-Package microtype Info: Character `029' is missing
-(microtype)             in font `T1/lmr/m/sc/10'.
-(microtype)             Ignoring protrusion settings for this character.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 69.
+(Font)              <8> on input line 61.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 69.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 69.
+(Font)              <6> on input line 61.
 
-Underfull \hbox (badness 10000) in paragraph at lines 69--69
+Underfull \hbox (badness 10000) in paragraph at lines 61--61
 \T1/lmr/m/n/8 (+20) upload / fachgebiete / naumann / projekte / repeatability /
  Restaurants /
  []
 
 
-Underfull \hbox (badness 5245) in paragraph at lines 71--71
+Underfull \hbox (badness 5245) in paragraph at lines 63--63
 [][][][]\T1/lmr/m/n/8 (+20) Gold stan-dard pro-vided at []$https : / / hpi . de
  / ^^\leadmin / user _
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 71--71
+Underfull \hbox (badness 10000) in paragraph at lines 63--63
 \T1/lmr/m/n/8 (+20) upload / fachgebiete / naumann / projekte / repeatability /
  Restaurants /
  []
@@ -1548,19 +1537,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 71--71
 [1{c:/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
-] [2]
-Underfull \hbox (badness 2285) in paragraph at lines 139--139
+]
+Underfull \hbox (badness 10000) in paragraph at lines 113--113
+[]|\T1/lmr/m/n/8 (+20) Sometimes \T1/lmr/m/it/8 (+20) 212/627-
+ []
+
+[2]
+Underfull \hbox (badness 2285) in paragraph at lines 132--132
 [][][][]\T1/lmr/m/n/8 (+20) More in-for-ma-tion on py_stringmatching can be fou
 nd at
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 139--139
+Underfull \hbox (badness 10000) in paragraph at lines 132--132
 []$\T1/lmr/m/n/8 (+20) https : / / sites . google . com / site / anhaidgroup / 
 projects / magellan / py _
  []
 
-(./recall_figure.tex
+(./precision1.tex
+PGFPlots: reading {../data/results/summary.txt}
+PGFPlots: reading {../data/results/summary.txt}
+
+Overfull \hbox (0.57056pt too wide) in paragraph at lines 26--27
+[][] 
+ []
+
+) (./recall1.tex
+PGFPlots: reading {../data/results/summary.txt}
+PGFPlots: reading {../data/results/summary.txt}
+) [3] (./thresholds_figure.tex
+PGFPlots: reading {../data/results/summary.txt}
+PGFPlots: reading {../data/results/summary.txt}
+PGFPlots: reading {../data/results/summary.txt}
+
+Overfull \hbox (1.16205pt too wide) in paragraph at lines 32--33
+[][] 
+ []
+
+) [4] (./recall_figure.tex
 PGFPlots: reading {../data/results/precision_recall_1.txt}
 Package pgfplots info on input line 15: boxplot: got lower quartile=1.0e0
 Package pgfplots info on input line 15: boxplot: got median=1.0e0
@@ -1586,7 +1600,7 @@ PGFPlots: reading {../data/results/precision_recall_4.txt}
 Package pgfplots info on input line 18: boxplot: got lower quartile=9.55e-1
 Package pgfplots info on input line 18: boxplot: got median=9.77e-1
 Package pgfplots info on input line 18: boxplot: got upper quartile=1.0e0
-Package pgfplots info on input line 18: boxplot: got sample size=3.14e2
+Package pgfplots info on input line 18: boxplot: got sample size=3.15e2
 Package pgfplots info on input line 18: boxplot: got lower whisker=9.09e-1
 Package pgfplots info on input line 18: boxplot: got upper whisker=1.0e0
 PGFPlots: reading {../data/results/precision_recall_5.txt}
@@ -1657,7 +1671,7 @@ PGFPlots: reading {../data/results/precision_recall_4.txt}
 Package pgfplots info on input line 45: boxplot: got lower quartile=9.38e-1
 Package pgfplots info on input line 45: boxplot: got median=9.55e-1
 Package pgfplots info on input line 45: boxplot: got upper quartile=9.55e-1
-Package pgfplots info on input line 45: boxplot: got sample size=3.14e2
+Package pgfplots info on input line 45: boxplot: got sample size=3.15e2
 Package pgfplots info on input line 45: boxplot: got lower whisker=9.2e-1
 Package pgfplots info on input line 45: boxplot: got upper whisker=9.64e-1
 PGFPlots: reading {../data/results/precision_recall_5.txt}
@@ -1702,152 +1716,169 @@ Package pgfplots info on input line 51: boxplot: got upper quartile=9.64e-1
 Package pgfplots info on input line 51: boxplot: got sample size=3.15e2
 Package pgfplots info on input line 51: boxplot: got lower whisker=9.64e-1
 Package pgfplots info on input line 51: boxplot: got upper whisker=9.64e-1
-) (./precision_figure.tex
+
+Overfull \hbox (264.0pt too wide) in paragraph at lines 2--56
+[][]
+ []
+
+
+Overfull \hbox (264.0pt too wide) in paragraph at lines 2--56
+[] 
+ []
+
+) [5] (./precision_figure.tex
 PGFPlots: reading {../data/results/precision_recall_1.txt}
-Package pgfplots info on input line 15: boxplot: got lower quartile=9.42e-1
-Package pgfplots info on input line 15: boxplot: got median=9.46e-1
-Package pgfplots info on input line 15: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 15: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 15: boxplot: got lower whisker=9.35e-1
-Package pgfplots info on input line 15: boxplot: got upper whisker=9.52e-1
-PGFPlots: reading {../data/results/precision_recall_2.txt}
-Package pgfplots info on input line 16: boxplot: got lower quartile=8.8e-1
-Package pgfplots info on input line 16: boxplot: got median=9.17e-1
-Package pgfplots info on input line 16: boxplot: got upper quartile=9.57e-1
-Package pgfplots info on input line 16: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 16: boxplot: got lower whisker=7.86e-1
-Package pgfplots info on input line 16: boxplot: got upper whisker=1.0e0
-PGFPlots: reading {../data/results/precision_recall_3.txt}
-Package pgfplots info on input line 17: boxplot: got lower quartile=8.42e-1
-Package pgfplots info on input line 17: boxplot: got median=8.68e-1
-Package pgfplots info on input line 17: boxplot: got upper quartile=9.12e-1
+Package pgfplots info on input line 17: boxplot: got lower quartile=9.42e-1
+Package pgfplots info on input line 17: boxplot: got median=9.46e-1
+Package pgfplots info on input line 17: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 17: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 17: boxplot: got lower whisker=7.44e-1
-Package pgfplots info on input line 17: boxplot: got upper whisker=9.71e-1
-PGFPlots: reading {../data/results/precision_recall_4.txt}
-Package pgfplots info on input line 18: boxplot: got lower quartile=8.08e-1
-Package pgfplots info on input line 18: boxplot: got median=8.4e-1
-Package pgfplots info on input line 18: boxplot: got upper quartile=8.6925008e-
-1
-Package pgfplots info on input line 18: boxplot: got sample size=3.14e2
-Package pgfplots info on input line 18: boxplot: got lower whisker=7.17e-1
-Package pgfplots info on input line 18: boxplot: got upper whisker=9.57e-1
-PGFPlots: reading {../data/results/precision_recall_5.txt}
-Package pgfplots info on input line 19: boxplot: got lower quartile=7.97e-1
-Package pgfplots info on input line 19: boxplot: got median=8.28e-1
-Package pgfplots info on input line 19: boxplot: got upper quartile=8.55e-1
-Package pgfplots info on input line 19: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 19: boxplot: got lower whisker=7.2e-1
-Package pgfplots info on input line 19: boxplot: got upper whisker=9.31e-1
-PGFPlots: reading {../data/results/precision_recall_6.txt}
-Package pgfplots info on input line 20: boxplot: got lower quartile=7.93e-1
-Package pgfplots info on input line 20: boxplot: got median=8.1499991e-1
-Package pgfplots info on input line 20: boxplot: got upper quartile=8.42e-1
-Package pgfplots info on input line 20: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 20: boxplot: got lower whisker=7.33e-1
-Package pgfplots info on input line 20: boxplot: got upper whisker=9.14e-1
-PGFPlots: reading {../data/results/precision_recall_7.txt}
-Package pgfplots info on input line 21: boxplot: got lower quartile=7.98e-1
-Package pgfplots info on input line 21: boxplot: got median=8.15e-1
-Package pgfplots info on input line 21: boxplot: got upper quartile=8.35e-1
-Package pgfplots info on input line 21: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 21: boxplot: got lower whisker=7.47e-1
-Package pgfplots info on input line 21: boxplot: got upper whisker=8.87e-1
-PGFPlots: reading {../data/results/precision_recall_8.txt}
-Package pgfplots info on input line 22: boxplot: got lower quartile=8.19e-1
-Package pgfplots info on input line 22: boxplot: got median=8.35e-1
-Package pgfplots info on input line 22: boxplot: got upper quartile=8.51e-1
-Package pgfplots info on input line 22: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 22: boxplot: got lower whisker=7.75e-1
-Package pgfplots info on input line 22: boxplot: got upper whisker=8.96e-1
-PGFPlots: reading {../data/results/precision_recall_9.txt}
-Package pgfplots info on input line 23: boxplot: got lower quartile=8.64e-1
-Package pgfplots info on input line 23: boxplot: got median=8.73e-1
-Package pgfplots info on input line 23: boxplot: got upper quartile=8.82e-1
-Package pgfplots info on input line 23: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 23: boxplot: got lower whisker=8.41e-1
-Package pgfplots info on input line 23: boxplot: got upper whisker=9.07e-1
-PGFPlots: reading {../data/results/precision_recall_10.txt}
-Package pgfplots info on input line 24: boxplot: got lower quartile=9.47e-1
-Package pgfplots info on input line 24: boxplot: got median=9.47e-1
-Package pgfplots info on input line 24: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 24: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 24: boxplot: got lower whisker=9.47e-1
-Package pgfplots info on input line 24: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_1.txt}
-Package pgfplots info on input line 42: boxplot: got lower quartile=9.42e-1
-Package pgfplots info on input line 42: boxplot: got median=9.46e-1
-Package pgfplots info on input line 42: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 42: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 42: boxplot: got lower whisker=9.35e-1
-Package pgfplots info on input line 42: boxplot: got upper whisker=9.52e-1
+Package pgfplots info on input line 17: boxplot: got lower whisker=9.35e-1
+Package pgfplots info on input line 17: boxplot: got upper whisker=9.52e-1
 PGFPlots: reading {../data/results/precision_recall_2.txt}
-Package pgfplots info on input line 43: boxplot: got lower quartile=9.43e-1
-Package pgfplots info on input line 43: boxplot: got median=9.46e-1
-Package pgfplots info on input line 43: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 43: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 43: boxplot: got lower whisker=9.37e-1
-Package pgfplots info on input line 43: boxplot: got upper whisker=9.52e-1
+Package pgfplots info on input line 18: boxplot: got lower quartile=8.8e-1
+Package pgfplots info on input line 18: boxplot: got median=9.17e-1
+Package pgfplots info on input line 18: boxplot: got upper quartile=9.57e-1
+Package pgfplots info on input line 18: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 18: boxplot: got lower whisker=7.86e-1
+Package pgfplots info on input line 18: boxplot: got upper whisker=1.0e0
 PGFPlots: reading {../data/results/precision_recall_3.txt}
-Package pgfplots info on input line 44: boxplot: got lower quartile=9.44e-1
-Package pgfplots info on input line 44: boxplot: got median=9.46e-1
-Package pgfplots info on input line 44: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 44: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 44: boxplot: got lower whisker=9.41e-1
-Package pgfplots info on input line 44: boxplot: got upper whisker=9.49e-1
+Package pgfplots info on input line 19: boxplot: got lower quartile=8.42e-1
+Package pgfplots info on input line 19: boxplot: got median=8.68e-1
+Package pgfplots info on input line 19: boxplot: got upper quartile=9.12e-1
+Package pgfplots info on input line 19: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 19: boxplot: got lower whisker=7.44e-1
+Package pgfplots info on input line 19: boxplot: got upper whisker=9.71e-1
 PGFPlots: reading {../data/results/precision_recall_4.txt}
-Package pgfplots info on input line 45: boxplot: got lower quartile=9.44e-1
-Package pgfplots info on input line 45: boxplot: got median=9.47e-1
-Package pgfplots info on input line 45: boxplot: got upper quartile=9.47e-1
-Package pgfplots info on input line 45: boxplot: got sample size=3.14e2
-Package pgfplots info on input line 45: boxplot: got lower whisker=9.42e-1
-Package pgfplots info on input line 45: boxplot: got upper whisker=9.51e-1
+Package pgfplots info on input line 20: boxplot: got lower quartile=8.08e-1
+Package pgfplots info on input line 20: boxplot: got median=8.4e-1
+Package pgfplots info on input line 20: boxplot: got upper quartile=8.6849985e-
+1
+Package pgfplots info on input line 20: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 20: boxplot: got lower whisker=7.21e-1
+Package pgfplots info on input line 20: boxplot: got upper whisker=9.57e-1
 PGFPlots: reading {../data/results/precision_recall_5.txt}
-Package pgfplots info on input line 46: boxplot: got lower quartile=9.46e-1
-Package pgfplots info on input line 46: boxplot: got median=9.47e-1
+Package pgfplots info on input line 21: boxplot: got lower quartile=7.97e-1
+Package pgfplots info on input line 21: boxplot: got median=8.28e-1
+Package pgfplots info on input line 21: boxplot: got upper quartile=8.55e-1
+Package pgfplots info on input line 21: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 21: boxplot: got lower whisker=7.2e-1
+Package pgfplots info on input line 21: boxplot: got upper whisker=9.31e-1
+PGFPlots: reading {../data/results/precision_recall_6.txt}
+Package pgfplots info on input line 22: boxplot: got lower quartile=7.93e-1
+Package pgfplots info on input line 22: boxplot: got median=8.1499991e-1
+Package pgfplots info on input line 22: boxplot: got upper quartile=8.42e-1
+Package pgfplots info on input line 22: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 22: boxplot: got lower whisker=7.33e-1
+Package pgfplots info on input line 22: boxplot: got upper whisker=9.14e-1
+PGFPlots: reading {../data/results/precision_recall_7.txt}
+Package pgfplots info on input line 23: boxplot: got lower quartile=7.98e-1
+Package pgfplots info on input line 23: boxplot: got median=8.15e-1
+Package pgfplots info on input line 23: boxplot: got upper quartile=8.35e-1
+Package pgfplots info on input line 23: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 23: boxplot: got lower whisker=7.47e-1
+Package pgfplots info on input line 23: boxplot: got upper whisker=8.87e-1
+PGFPlots: reading {../data/results/precision_recall_8.txt}
+Package pgfplots info on input line 24: boxplot: got lower quartile=8.19e-1
+Package pgfplots info on input line 24: boxplot: got median=8.35e-1
+Package pgfplots info on input line 24: boxplot: got upper quartile=8.51e-1
+Package pgfplots info on input line 24: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 24: boxplot: got lower whisker=7.75e-1
+Package pgfplots info on input line 24: boxplot: got upper whisker=8.96e-1
+PGFPlots: reading {../data/results/precision_recall_9.txt}
+Package pgfplots info on input line 25: boxplot: got lower quartile=8.64e-1
+Package pgfplots info on input line 25: boxplot: got median=8.73e-1
+Package pgfplots info on input line 25: boxplot: got upper quartile=8.82e-1
+Package pgfplots info on input line 25: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 25: boxplot: got lower whisker=8.41e-1
+Package pgfplots info on input line 25: boxplot: got upper whisker=9.07e-1
+PGFPlots: reading {../data/results/precision_recall_10.txt}
+Package pgfplots info on input line 26: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 26: boxplot: got median=9.47e-1
+Package pgfplots info on input line 26: boxplot: got upper quartile=9.47e-1
+Package pgfplots info on input line 26: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 26: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 26: boxplot: got upper whisker=9.47e-1
+PGFPlots: reading {../data/results/precision_recall_1.txt}
+Package pgfplots info on input line 46: boxplot: got lower quartile=9.42e-1
+Package pgfplots info on input line 46: boxplot: got median=9.46e-1
 Package pgfplots info on input line 46: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 46: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 46: boxplot: got lower whisker=9.46e-1
-Package pgfplots info on input line 46: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_6.txt}
-Package pgfplots info on input line 47: boxplot: got lower quartile=9.46e-1
-Package pgfplots info on input line 47: boxplot: got median=9.47e-1
+Package pgfplots info on input line 46: boxplot: got lower whisker=9.35e-1
+Package pgfplots info on input line 46: boxplot: got upper whisker=9.52e-1
+PGFPlots: reading {../data/results/precision_recall_2.txt}
+Package pgfplots info on input line 47: boxplot: got lower quartile=9.43e-1
+Package pgfplots info on input line 47: boxplot: got median=9.46e-1
 Package pgfplots info on input line 47: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 47: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 47: boxplot: got lower whisker=9.46e-1
-Package pgfplots info on input line 47: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_7.txt}
-Package pgfplots info on input line 48: boxplot: got lower quartile=9.47e-1
-Package pgfplots info on input line 48: boxplot: got median=9.47e-1
+Package pgfplots info on input line 47: boxplot: got lower whisker=9.37e-1
+Package pgfplots info on input line 47: boxplot: got upper whisker=9.52e-1
+PGFPlots: reading {../data/results/precision_recall_3.txt}
+Package pgfplots info on input line 48: boxplot: got lower quartile=9.44e-1
+Package pgfplots info on input line 48: boxplot: got median=9.46e-1
 Package pgfplots info on input line 48: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 48: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 48: boxplot: got lower whisker=9.47e-1
-Package pgfplots info on input line 48: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_8.txt}
-Package pgfplots info on input line 49: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 48: boxplot: got lower whisker=9.41e-1
+Package pgfplots info on input line 48: boxplot: got upper whisker=9.49e-1
+PGFPlots: reading {../data/results/precision_recall_4.txt}
+Package pgfplots info on input line 49: boxplot: got lower quartile=9.44e-1
 Package pgfplots info on input line 49: boxplot: got median=9.47e-1
 Package pgfplots info on input line 49: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 49: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 49: boxplot: got lower whisker=9.47e-1
-Package pgfplots info on input line 49: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_9.txt}
-Package pgfplots info on input line 50: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 49: boxplot: got lower whisker=9.42e-1
+Package pgfplots info on input line 49: boxplot: got upper whisker=9.51e-1
+PGFPlots: reading {../data/results/precision_recall_5.txt}
+Package pgfplots info on input line 50: boxplot: got lower quartile=9.46e-1
 Package pgfplots info on input line 50: boxplot: got median=9.47e-1
 Package pgfplots info on input line 50: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 50: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 50: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 50: boxplot: got lower whisker=9.46e-1
 Package pgfplots info on input line 50: boxplot: got upper whisker=9.47e-1
-PGFPlots: reading {../data/results/precision_recall_10.txt}
-Package pgfplots info on input line 51: boxplot: got lower quartile=9.47e-1
+PGFPlots: reading {../data/results/precision_recall_6.txt}
+Package pgfplots info on input line 51: boxplot: got lower quartile=9.46e-1
 Package pgfplots info on input line 51: boxplot: got median=9.47e-1
 Package pgfplots info on input line 51: boxplot: got upper quartile=9.47e-1
 Package pgfplots info on input line 51: boxplot: got sample size=3.15e2
-Package pgfplots info on input line 51: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 51: boxplot: got lower whisker=9.46e-1
 Package pgfplots info on input line 51: boxplot: got upper whisker=9.47e-1
-) (./thresholds_figure.tex
-PGFPlots: reading {../data/results/summary.txt}
-PGFPlots: reading {../data/results/summary.txt}
-PGFPlots: reading {../data/results/summary.txt}
+PGFPlots: reading {../data/results/precision_recall_7.txt}
+Package pgfplots info on input line 52: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 52: boxplot: got median=9.47e-1
+Package pgfplots info on input line 52: boxplot: got upper quartile=9.47e-1
+Package pgfplots info on input line 52: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 52: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 52: boxplot: got upper whisker=9.47e-1
+PGFPlots: reading {../data/results/precision_recall_8.txt}
+Package pgfplots info on input line 53: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 53: boxplot: got median=9.47e-1
+Package pgfplots info on input line 53: boxplot: got upper quartile=9.47e-1
+Package pgfplots info on input line 53: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 53: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 53: boxplot: got upper whisker=9.47e-1
+PGFPlots: reading {../data/results/precision_recall_9.txt}
+Package pgfplots info on input line 54: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 54: boxplot: got median=9.47e-1
+Package pgfplots info on input line 54: boxplot: got upper quartile=9.47e-1
+Package pgfplots info on input line 54: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 54: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 54: boxplot: got upper whisker=9.47e-1
+PGFPlots: reading {../data/results/precision_recall_10.txt}
+Package pgfplots info on input line 55: boxplot: got lower quartile=9.47e-1
+Package pgfplots info on input line 55: boxplot: got median=9.47e-1
+Package pgfplots info on input line 55: boxplot: got upper quartile=9.47e-1
+Package pgfplots info on input line 55: boxplot: got sample size=3.15e2
+Package pgfplots info on input line 55: boxplot: got lower whisker=9.47e-1
+Package pgfplots info on input line 55: boxplot: got upper whisker=9.47e-1
+Missing character: There is no , in font nullfont!
+
+Overfull \hbox (264.0pt too wide) in paragraph at lines 2--60
+[]$[]$
+ []
+
+
+Overfull \hbox (264.0pt too wide) in paragraph at lines 2--60
+[]$ 
+ []
+
 )
 
 ** Conference Paper **
@@ -1860,34 +1891,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 157.
-[3
-
-] [4] [5] [6
-
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 200.
+[6
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 157.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 200.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 157.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 157.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 200.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 200.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: F754362272FBBCE3002BCCF50B45350C;851.
+(rerunfilecheck)             Checksum: 9F1E48F99463FCF18F7D06140F152DDF;765.
 Package logreq Info: Writing requests to 'report.run.xml'.
 \openout1 = `report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 39805 strings out of 494497
- 892253 string characters out of 6174739
- 1643291 words of memory out of 5000000
- 42625 multiletter control sequences out of 15000+600000
- 207612 words of font info for 191 fonts, out of 8000000 for 9000
+ 39665 strings out of 494497
+ 890589 string characters out of 6174739
+ 1525826 words of memory out of 5000000
+ 42467 multiletter control sequences out of 15000+600000
+ 204053 words of font info for 191 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 64i,19n,111p,1151b,2823s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,20n,111p,1151b,2823s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/texlive/2018/tex
-mf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/texlive/2018/texmf-dist/fonts/enc/
-dvips/lm/lm-rm.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc
+mf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvip
+s/lm/lm-mathit.enc}{c:/texlive/2018/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc
 }<c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmbx9.pfb><c:/texlive/2018/t
 exmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/texlive/2018/texmf-dist/fonts/t
 ype1/public/lm/lmcsc10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lm
@@ -1901,10 +1929,10 @@ m/lmr9.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/tex
 live/2018/texmf-dist/fonts/type1/public/lm/lmri8.pfb><c:/texlive/2018/texmf-dis
 t/fonts/type1/public/lm/lmsy10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/publ
 ic/lm/lmsy7.pfb>
-Output written on report.pdf (6 pages, 343249 bytes).
+Output written on report.pdf (6 pages, 366953 bytes).
 PDF statistics:
- 212 PDF objects out of 1000 (max. 8388607)
- 186 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
- 23157 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 229 PDF objects out of 1000 (max. 8388607)
+ 202 compressed objects within 3 object streams
+ 38 named destinations out of 1000 (max. 500000)
+ 21093 words of extra memory for PDF output out of 24883 (max. 10000000)
 

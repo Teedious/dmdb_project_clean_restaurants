@@ -1,4 +1,4 @@
-phone_threshold, name_threshold, address_threshold, training_data_precision, training_data_recall, test_data_precision, test_data_recall
+phone_threshold,name_threshold,address_threshold,training_data_precision,training_data_recall,test_data_precision,test_data_recall
 0.0, 0.3, 0.4, 0.917, 1.000, 0.944, 0.902
 0.3, 0.2, 0.0, 0.889, 0.970, 0.947, 0.955
 0.1, 0.3, 0.0, 0.846, 1.000, 0.946, 0.946

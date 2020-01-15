@@ -1,22 +1,41 @@
+% !TeX spellcheck = en_US
 \begin{figure}
 	\begin{tikzpicture}
 		\begin{axis}
 		[
 			legend pos=north west,
 			height=6cm,
-			width=7cm,
-			xmax=1,
-			xmin=0,
+			xlabel= training set size (\%),
+			xtick={10,20,30,40,50,60,70,80,90,100},
+			xmin = 5,
+			xmax = 100,
+			ymin = 0,
+			ymax = 1,
 			yminorgrids=true,
 			ymajorgrids=true,
 			minor y tick num=3,
+			ylabel=optimal threshold,
 		]
-			\addplot+  table [y=x,x=phone_threshold, col sep=comma] {../data/results/summary.txt};
+			\addplot+ [mark=*,error bars/.cd,
+			x dir=both, x explicit,
+			y dir=both, y explicit,] table [x=x,y=phone_threshold, y error=phone_threshold_stdev, col sep=comma] {../data/results/summary.txt};
 			\addlegendentry{phone}
-			\addplot+ [mark=*] table [y=x,x=name_threshold, col sep=comma] {../data/results/summary.txt};
+			\addplot+ [mark=x,error bars/.cd,
+						x dir=both, x explicit,
+						y dir=both, y explicit,] table [x=x,y=name_threshold, y error=name_threshold_stdev, col sep=comma] {../data/results/summary.txt};
 			\addlegendentry{name}
-			\addplot+ [mark=*] table [y=x,x=address_threshold, col sep=comma] {../data/results/summary.txt};
+			\addplot+ [mark=o,error bars/.cd,
+						x dir=both, x explicit,
+						y dir=both, y explicit,] table [x=x,y=address_threshold, y error=address_threshold_stdev, col sep=comma] {../data/results/summary.txt};
 			\addlegendentry{address}
 		\end{axis}
 	\end{tikzpicture}
+	\caption{Average optimal thresholds for duplicate detection calculated using different sizes of training sets}\label{thresholds}
 \end{figure}
+
+
+
+
+
+
+	

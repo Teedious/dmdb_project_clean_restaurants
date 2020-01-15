@@ -1,9 +1,11 @@
-\begin{figure*}
+\begin{figure}[H]
 	\begin{subfigure}{\textwidth}
 		\begin{tikzpicture}
 			\begin{axis}
 			[
-				height=6cm,
+				major grid style={thin, dotted},
+				ymajorgrids=true,
+				height=5cm,
 				xmin = 0.65,
 				xmax = 1.01,
 				xlabel = precision,
@@ -30,7 +32,9 @@
 		\begin{tikzpicture}
 			\begin{axis}
 			[
-				height=6cm,
+				major grid style={thin, dotted},
+				ymajorgrids=true,
+				height=5cm,
 				xmin = 0.65,
 				xmax = 1.01,
 				xlabel = precision,
@@ -49,9 +53,9 @@
 				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
 				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
 				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
+,			\end{axis}
 		\end{tikzpicture}
 		\caption{Precision of test data with different sizes of training data and optimal thresholds}
 	\end{subfigure}
 		
-\end{figure*}
+\end{figure}
