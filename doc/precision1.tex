@@ -1,0 +1,29 @@
+\begin{figure}
+	\begin{tikzpicture}
+		\begin{axis}
+		[
+			legend pos=south west,
+			height=6cm,
+			xlabel= training set size (\%),
+			xtick={10,20,30,40,50,60,70,80,90,100},
+			xmin = 5,
+			xmax = 100,
+			ymax=1,
+			yminorgrids=true,
+			ymajorgrids=true,
+			minor y tick num=3,
+			ylabel=precision,
+		]
+			\addplot+ [mark=*,error bars/.cd,
+			x dir=both, x explicit,
+			y dir=both, y explicit,] table [x=x,y=training_data_precision, y error=training_data_precision_stdev, col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{training data}
+			\addplot+ [mark=x,error bars/.cd,
+						x dir=both, x explicit,
+						y dir=both, y explicit,] table [x=x,y=test_data_precision, y error=test_data_precision_stdev,col sep=comma] {../data/results/summary.txt};
+			\addlegendentry{test data}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Average precision of duplicate detection in training and test data using different sizes of training sets}\label{precision}
+\end{figure}
+	
