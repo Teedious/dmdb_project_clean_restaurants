@@ -105,7 +105,6 @@ def run_duplicate_detection(recreate_training_set=False, verbose=True):
     clean(util.training_set_file, util.training_collection_lane)
 
     tr = train(util.training_set_gold_standard_file, util.training_collection_lane)
-    print(tr)
 
     get_clean_collection(util.restaurants_file, util.standard_collection)
 
