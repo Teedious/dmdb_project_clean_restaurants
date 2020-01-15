@@ -11,6 +11,7 @@
 \usepackage{csquotes}
 \usepackage{booktabs}
 \usepackage{algorithmic}
+\usepackage{dblfloatfix}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -45,7 +46,7 @@ florian.loher@st.oth-regensburg.de}
 \maketitle
 
 \begin{abstract}
-Duplicate detection is an important part of data cleaning. Many approaches use string matching as a means to calculate the similarity of records. In this article I elaborate on the use of semi-random training sets combined with the SoftTF-IDF similarity measure, reaching precision and recall values over 85\% for relatively small training sets.
+Duplicate detection is an important part of data cleaning. Many approaches use string matching as a means to calculate the similarity of records. In this article I elaborate on the use of semi-random training sets combined with the SoftTF-IDF similarity measure, reaching precision and recall values over 85\% for relatively small training sets\footnote{The code to this project can be found at \url{https://github.com/Teedious/dmdb_project_clean_restaurants}}.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -90,13 +91,13 @@ In the case of the restaurants data I am looking at, a quick audit reveals that 
 
 In the parsing and transformation phase I copy the data to an instance of \emph{MongoDB}\footnote{MongoDB is a document database. For more information visit \url{https://www.mongodb.com/}} in order to make the data easier accessible in the following stages. Each row of the original data is transformed into a record in the database. In MongoDB the equivalent to tables of relational databases are collections. Each step of my data cleaning process creates a new collection with the updated data.
 
-The process of standardization is split up, targeting each field of the records separately. Because of that the order in which the fields are standardized is irrelevant to the resulting data.
+The process of standardization is split up, targeting each field of the records separately. The order in which the fields are standardized is irrelevant to the resulting data.
 
 Each field is standardized by the use of different regular expressions that are suited to find the irregularities in the field. Furthermore replacements are done using dictionaries of standardized values. For example the address field contains street types which are sometimes abbreviated. One regular expression is used to find all abbreviations in a field and a dictionary containing street types and their common abbreviations enables the replacement of each instance by its non abbreviated form.
 \begin{table}
 	\begin{tabularx}{\columnwidth}{lr@{ }XX}
 	\toprule
-	field &&type of inconsistency & example \\
+	Field &&Type of inconsistency & Example \\
 	\midrule
 	city & --&Irregular use of abbreviations &Sometimes \emph{la} instead of \emph{los angeles}\\\rule[.2ex]{0pt}{2.5ex}
 		 & --&Use of city district name as city name& \emph{hollywood} instead of \emph{los angeles}\\
@@ -158,7 +159,7 @@ Further figures depicting precision and recall in more detail can be found in ap
 
 The optimal thresholds shown in figure \ref{thresholds} present some interesting questions as well. While initially decreasing from $\unsim0.652$ at $10\%$ to $\unsim0.506$ at $50\%$ the threshold of the phone field finally increases to $1.000$ at $100\%$ whereas name and address both decrease rather steadily from $\unsim0.385$ to $\unsim0.100$ (name) and from  $\unsim0.351$ to $0.000$ (address) respectively. The former indicates that the phone field seems to be a good indicator for duplicates if it is used very rigorously. This conforms to the data since most phone numbers of duplicates are identical with only a few outliers. The initial bump however does not lend itself to any immediate conclusions.
 
-The address threshold quickly descending to values near 0 might be an indicator that the chosen similarity measure might not be suitable for address date because intuitively addresses should be a good discriminator for duplicates. An alternative conclusion would be that the threshold of phone entries already encapsulates most of the information that is produced by the address threshold leaving a high address threshold only to declare actual duplicates as non duplicates, which in turn decreases both precision and recall.
+The address threshold quickly descending to values near 0 might be an indicator that the chosen similarity measure might not be suitable for address date because intuitively addresses should be a good discriminator for duplicates. An alternative conclusion would be that the threshold of phone entries already encapsulates most of the information that is produced by the address threshold leaving a high address threshold only to declare actual duplicates as non duplicates, which decreases both precision and recall.
 
 
 \section{Conclusions, outlook and related work}\label{conclusions}
@@ -174,27 +175,23 @@ Additional research into the causes of the initial bump in phone threshold as we
 \printbibliography
 
 \appendices
+	\twocolumn[{
 	\section{Tables}\label{tableappendix}
-	\begin{table}[H]
+	{
 	\centering
-	\begin{tabular}{lrrrrr}
-	training size relative ($\%$)	  &  10&  20&  30&  40&  50\\
+	\begin{tabular}{lrrrrrrrrrr}
+	Training size relative ($\%$)	  &  10&  20&  30&  40&  50 &  60&  70&  80&  90& 100\\
 	\midrule                                                     
-	training size absolute 			  &  86& 172& 259& 345& 432\\
-	number of duplicates	  		  &  11&  22&  33&  44&  56\\                                                   
-	ratio of duplicates ($\%$)        &12,8&12,8&12,7&12,8&13,0\\
-	\\\\
-	training size relative ($\%$)	  &  60&  70&  80&  90& 100\\
-	\midrule
-	training size absolute 			  & 518& 604& 691& 777& 864\\
-	number of duplicates	  		  &  67&  78&  89& 100& 112\\
-	ratio of duplicates ($\%$)        &12,9&12,9&12,9&12,9&13,0\\
+	Training size absolute 			  &  86& 172& 259& 345& 432& 518& 604& 691& 777& 864\\
+	Number of duplicates	  		  &  11&  22&  33&  44&  56&  67&  78&  89& 100& 112\\                            
+	Ratio of duplicates ($\%$)        &12,8&12,8&12,7&12,8&13,0&12,9&12,9&12,9&12,9&13,0
 	\end{tabular}
-	\caption{Data sizes and ratios in training sets}\label{ratios}
-	\end{table}
+	\captionof{table}{Data sizes and ratios in training sets}\label{ratios}
+	}
 	
 	\section{Boxplots of precision and recall for training and test data}\label{figureappendix}
 	\input{recall_figure}
-	\newpage \null\newpage
+	\vspace{2em}
 	\input{precision_figure}
+	}]
 \end{document}

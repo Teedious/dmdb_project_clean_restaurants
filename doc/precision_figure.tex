@@ -1,44 +1,43 @@
-\begin{figure}[H]
-	\begin{subfigure}{\textwidth}
+{
+\centering
+	\begin{tikzpicture}
+				\begin{axis}
+				[
+					major grid style={thin, dotted},
+					ymajorgrids=true,
+					height=5cm,
+					width=\textwidth,
+					xmin = 0.65,
+					xmax = 1.01,
+					xlabel = Precision,
+					ylabel = Training data size (\%),
+					ytick = {1,2,3,4,5,6,7,8,9,10},
+					yticklabels = {10,20,30,40,50,60,70,80,90,100},
+					boxplot/draw direction=x
+				]
+					\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
+					\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
+				\end{axis}
+			\end{tikzpicture}
 		\begin{tikzpicture}
 			\begin{axis}
 			[
 				major grid style={thin, dotted},
 				ymajorgrids=true,
 				height=5cm,
+				width=\textwidth,
 				xmin = 0.65,
 				xmax = 1.01,
-				xlabel = precision,
-				ylabel = training data size (\%),
-				ytick = {1,2,3,4,5,6,7,8,9,10},
-				yticklabels = {10,20,30,40,50,60,70,80,90,100},
-				boxplot/draw direction=x
-			]
-				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_1.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_2.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_3.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_4.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_5.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_6.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_7.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_8.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_9.txt};
-				\addplot [boxplot] table [y=training_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Precision of training data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\begin{tikzpicture}
-			\begin{axis}
-			[
-				major grid style={thin, dotted},
-				ymajorgrids=true,
-				height=5cm,
-				xmin = 0.65,
-				xmax = 1.01,
-				xlabel = precision,
-				ylabel = training data size (\%),
+				xlabel = Precision,
+				ylabel = Training data size (\%),
 				ytick = {1,2,3,4,5,6,7,8,9,10},
 				yticklabels = {10,20,30,40,50,60,70,80,90,100},
 				boxplot/draw direction=x
@@ -55,7 +54,5 @@
 				\addplot [boxplot] table [y=test_data_precision, col sep=comma] {../data/results/precision_recall_10.txt};
 ,			\end{axis}
 		\end{tikzpicture}
-		\caption{Precision of test data with different sizes of training data and optimal thresholds}
-	\end{subfigure}
-		
-\end{figure}
+	\captionof{figure}{Precision of training data (top) and test data (bottom) with different sizes of training data and optimal thresholds}
+}
