@@ -17,7 +17,7 @@
 - Run the following commands in a shell in the git repository to create an 
 environment where the dependencies are installed and switch to the environment:
 
-      > pipenv --python3.7
+      > pipenv --python 3.7
       > pipenv install
       > pipenv shell
 - Configure 'config-file' src/main_run.py
